@@ -10,7 +10,7 @@ import javafx.stage.Stage;
 public class PhotoLibrary extends Application {
 	@Override
 	public void start(Stage primaryStage) throws Exception {			
-		// set up FXML loader
+		// set up FXML load
 		FXMLLoader loader = new FXMLLoader();
 		loader.setLocation(getClass().getResource("/view/PhotoLib.fxml"));
 		
