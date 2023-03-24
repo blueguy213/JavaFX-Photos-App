@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.AnchorPane?>
+
+
+<AnchorPane maxHeight="510.0" maxWidth="673.0" minHeight="510.0" minWidth="673.0" prefHeight="510.0" prefWidth="673.0" style="-fx-background-color: #edffef; -fx-background-color: #e7ffff;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
+
+</AnchorPane>

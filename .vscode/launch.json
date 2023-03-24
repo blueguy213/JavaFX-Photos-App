@@ -1,0 +1,22 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Sree Kommalapati",
+            "request": "launch",
+            "mainClass": "app.SongLib",
+            "vmArgs": "--module-path '/Users/sreekommalapati/Desktop/SchoolStuff/SoftwareMethodolody/javafx-sdk-19.0.2.1/lib' --add-modules javafx.controls,javafx.fxml"
+        },
+        {
+            "type": "java",
+            "name": "Shreeti Patel",
+            "request": "launch",
+            "mainClass": "app.SongLib",
+            "vmArgs": "--module-path /Users/shreetipatel/Documents/javafx-sdk-19.0.2.1/lib --add-modules javafx.controls,javafx.fxml"
+        }
+    ]
+}
