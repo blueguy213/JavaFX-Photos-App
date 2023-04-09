@@ -1,8 +1,242 @@
-**Edit a file, create a new file, and clone from Bitbucket in under 2 minutes**
 
-When you're done, you can delete the content in this README and update the file with details for others getting started with your repository.
+# Desired src directory structure
 
-*We recommend that you open this README in another tab as you perform the tasks below. You can [watch our video](https://youtu.be/0ocf7u76WSo) for a full demo of all the steps in this tutorial. Open the video in a new tab to avoid leaving Bitbucket.*
+## src
+---
+### app
+- PhotoLibrary.java
+---
+### model
+- User.java
+- Photo.java
+- Album.java
+- Tag.java
+- DataManager.java
+---
+### view
+- ~~Login.fxml~~
+- Admin.fxml
+- User.fxml
+- Album.fxml
+- Search.fxml
+---
+### controller
+---
+- LoginController.java
+- AdminController.java
+- UserController.java
+- AlbumController.java
+- SearchController.java
+---
+# UML Class Description
+
+## User
+### Attributes:
+
+- username: String
+- password: String
+- albums: List\<Album>
+### Operations:
+- login(): boolean
+- logout(): void
+- createUser(username: String, password: String): void
+- deleteUser(username: String): void
+- listUsers(): List<String>
+- createAlbum(name: String): void
+- deleteAlbum(name: String): void
+- renameAlbum(oldName: String, newName: String): void
+- openAlbum(name: String): Album
+---
+## Admin (inherits User)
+### Attributes:
+### Operations:
+- createUser(username: String, password: String): void
+- deleteUser(username: String): void
+- listUsers(): List\<String>
+---
+## Album
+### Attributes:
+- name: String
+- photos: List\<Photo>
+### Operations:
+- getName(): String
+- setName(name: String): void
+- getPhotos(): List\<Photo>
+- addPhoto(photo: Photo): void
+- removePhoto(photo: Photo): void
+---
+## Photo
+### Attributes:
+- location: String
+- lastModifiedDate: Date
+- caption: String
+- tags: List\<Tag>
+### Operations:
+- getLocation(): String
+- getLastModifiedDate(): Date
+- getCaption(): String
+- setCaption(caption: String): void
+- getTags(): List<Tag>
+- addTag(tag: Tag): void
+- removeTag(tag: Tag): void
+---
+## Tag
+### Attributes:
+- name: String
+- value: String
+### Operations:
+- getName(): String
+- setName(name: String): void
+- getValue(): String
+- setValue(value: String): void
+---
+
+# UML State decription
+
+## Class: User
+
+### Attributes:
+- username: String
+- password: String
+- isAdmin: boolean
+- albums: List<Album>
+### Operations:
+- createAlbum(name: String): Album
+- deleteAlbum(name: String): void
+- renameAlbum(oldName: String, newName: String): void
+- searchByDateRange(startDate: Date, endDate: Date): List<Photo>
+- searchByTagTypeValuePairs(tagTypeValuePairs: Map<String, String>, conjunctionType: String): List<Photo>
+- createAlbumFromSearchResults(name: String, searchResults: List<Photo>): Album
+--- 
+## Class: Album
+
+### Attributes:
+- name: String
+- photos: List<Photo>
+### Operations:
+- addPhoto(photo: Photo): void
+- removePhoto(photo: Photo): void
+- getPhotos(): List<Photo>
+
+## Class: Photo
+
+### Attributes:
+- filepath: String
+- thumbnail: Image
+- date: Date
+- caption: String
+- tags: List<Tag>
+### Operations:
+- setCaption(caption: String): void
+- addTag(tag: Tag): void
+- removeTag(tag: Tag): void
+
+## Class: Tag
+
+### Attributes:
+- type: String
+- value: String
+### Operations:
+
+## Class: DataStorageManager
+
+### Attributes:
+- users: Map<String, User>
+### Operations:
+- addUser(user: User): void
+- deleteUser(username: String): void
+- saveUserData(): void
+- loadUserData(): void
+
+--- 
+
+# UML Sequence Description (Actions to support Unsupported, ~~Supported~~)
+
+## Login
+
+- User: login()
+
+## Admin Subsystem
+        
+### 2.1. List users
+
+- Admin: listUsers()
+
+### 2.2. Create a new user
+
+- Admin: createUser(username, password)
+
+### 2.3. Delete an existing user
+
+- Admin: deleteUser(username)
+
+## Non-admin User Subsystem
+        
+### 3.1. Create albums
+
+- User: createAlbum(name)
+
+### 3.2. Delete albums
+
+- User: deleteAlbum(name)
+
+### 3.3. Rename albums
+
+- User: renameAlbum(oldName, newName)
+
+### 3.4. Open an album
+
+- User: openAlbum(name)
+
+### 3.5. Inside an open album:
+    
+### 3.5.1. Add a photo
+
+- Album: addPhoto(photo)
+
+### 3.5.2. Remove a photo
+
+- Album: removePhoto(photo)
+
+### 3.5.3. Caption/recaption a photo
+
+- Photo: setCaption(caption)
+
+### 3.5.4. Add a tag to a photo
+
+- Photo: addTag(tag)
+
+### 3.5.5. Delete a tag from a photo
+
+- Photo: removeTag(tag)
+
+### 3.5.6. Copy a photo from one album to another
+
+- Album (source): getPhotos()
+- Album (destination): addPhoto(photo)
+
+### 3.5.7. Move a photo from one album (source) to another (destination)
+
+- Album (source): removePhoto(photo)
+- Album (destination): addPhoto(photo)
+
+## Search for photos
+
+### 4.1. Search for photos by a date range
+
+- User: searchByDateRange(startDate, endDate)
+
+### 4.2. Search for photos by tag type-value pairs
+
+- User: searchByTagTypeValuePairs(tagTypeValuePairs, conjunctionType)
+
+## Create an album containing the search results
+
+- User: createAlbumFromSearchResults(name, searchResults)
+
+## Logout
+
+- User: logout()
 
 ---
 

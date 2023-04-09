@@ -3,8 +3,8 @@ package app;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 public class PhotoLibrary extends Application {
@@ -12,10 +12,10 @@ public class PhotoLibrary extends Application {
 	public void start(Stage primaryStage) throws Exception {			
 		// set up FXML load
 		FXMLLoader loader = new FXMLLoader();
-		loader.setLocation(getClass().getResource("/view/PhotoLib.fxml"));
+		loader.setLocation(getClass().getResource("/views/PhotoLib.fxml"));
 		
 		// load the fxml
-		AnchorPane root = (AnchorPane)loader.load();
+		Parent root = FXMLLoader.load(getClass().getResource("/views/Login.fxml"));
 
 		Scene scene = new Scene(root, 673, 510);
 		primaryStage.setScene(scene);
