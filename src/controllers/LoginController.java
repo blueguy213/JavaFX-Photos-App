@@ -23,11 +23,11 @@ public class LoginController {
     @FXML
     private Button loginButton;
 
-    private ArrayList<User> users;
+    private DataManager dataManager;
 
     public LoginController() {
-        users = new ArrayList<User>();
-        DataManager.readUsers(users);
+        dataManager = DataManager.getInstance();
+        dataManager.readUsers();
     }
 
     @FXML
@@ -43,14 +43,14 @@ public class LoginController {
             return;
         }
 
-        for (User user : users) {
-            if (user.getUsername().equals(username)) {
-                viewPath = "/views/User.fxml";
-                UserController.setLoggedInUser(user);
-                JavaFXUtils.switchView(event, viewPath);
-                return;
-            }
+
+        if (dataManager.isUsernameTaken(username)) {
+            viewPath = "/views/User.fxml";
+            UserController.setLoggedInUser(dataManager.getUser(username));
+            JavaFXUtils.switchView(event, viewPath);
+            return;
+        } else {
+            JavaFXUtils.showAlert(AlertType.ERROR, "Error", "Invalid Username", "The username you entered is not registered.");
         }
-        JavaFXUtils.showAlert(AlertType.ERROR, "Error", "Invalid Username", "The username you entered is not registered.");
     }
 }

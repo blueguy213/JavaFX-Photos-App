@@ -10,6 +10,7 @@ import java.io.File;
 import java.util.ArrayList;
 
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ListView;
 
 import utils.JavaFXUtils;
 
@@ -19,9 +20,31 @@ import utils.JavaFXUtils;
  */
 public class DataManager {
 
-    ArrayList<User> users = new ArrayList<>();
-    ArrayList<Photo> photos = new ArrayList<>();
+    public static DataManager instance;
+    private ArrayList<User> users;
+    private ArrayList<Photo> photos;
 
+    /**
+     * Create a new DataManager object.
+     */
+    private DataManager() {
+        users = new ArrayList<User>();
+        photos = new ArrayList<Photo>();
+        readUsers();
+        // readPhotos();
+    }
+
+    /**
+     * Returns the DataManager instance.
+     * @return the DataManager instance
+     */
+    public static DataManager getInstance() {
+        if (instance == null) {
+            instance = new DataManager();
+        }
+        return instance;
+    }
+    
     /**
      * Reads the users from the users file and adds them to the users ArrayList.
      * @param users The ArrayList to add the users to.
@@ -39,9 +62,12 @@ public class DataManager {
             if (!usersFile.exists()) {
                 usersFile.getParentFile().mkdirs();
                 usersFile.createNewFile();
-                ArrayList<User> defaultUsers = new ArrayList<>();
-                users.add(new User("stock"));
-                writeUsers(defaultUsers);
+                User stockUser = new User("stock");
+                users.clear();
+                users.add(stockUser);
+                writeUsers();
+                System.out.println("Created stock user");
+                return;
             }
 
             FileInputStream fis = new FileInputStream(usersFile);
@@ -50,17 +76,18 @@ public class DataManager {
             
             if (!(deserializedObject instanceof ArrayList)) {
                 ois.close();
-                JavaFXUtils.showAlert(AlertType.ERROR, "Error", "Invalid File", "The user file you are trying to read is not valid.");
+                JavaFXUtils.showAlert(AlertType.ERROR, "Error", "Invalid File", "The user file you are trying to read is not valid. Not an ArrayList.");
             }
 
             ArrayList<?> deserializedList = (ArrayList<?>) deserializedObject;
-            
+
+            users.clear();
             for (Object element : deserializedList) {
                 if (element instanceof User) {
                     users.add((User) element);
                 } else {
                     ois.close();
-                    JavaFXUtils.showAlert(AlertType.ERROR, "Error", "Invalid File", "The user file you are trying to read is not valid.");
+                    JavaFXUtils.showAlert(AlertType.ERROR, "Error", "Invalid File", "The user file you are trying to read is not valid. Not a User.");
                 }
             }
             ois.close();
@@ -132,7 +159,6 @@ public class DataManager {
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(usersFile))) { 
             oos.writeObject(users);
             oos.flush();
-            oos.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -149,11 +175,10 @@ public class DataManager {
      * @see java.io.File
      */
     public void writePhotos(ArrayList<Photo> photos) {
-        File usersFile = new File("db/users");
-        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(usersFile))) { 
+        File photosFile = new File("db/photos");
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(photosFile))) { 
             oos.writeObject(photos);
             oos.flush();
-            oos.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -165,6 +190,7 @@ public class DataManager {
      * @return True if the username is taken, false otherwise.
      */
     public boolean isUsernameTaken(String username) {
+        readUsers();
         for (User user : users) {
             if (user.getUsername().equals(username)) {
                 return true;
@@ -179,6 +205,7 @@ public class DataManager {
      * @return The user with the given username.
      */
     public User getUser(String username) {
+        readUsers();
         for (User user : users) {
             if (user.getUsername().equals(username)) {
                 return user;
@@ -192,7 +219,8 @@ public class DataManager {
      * @param path The path of the photo to get.
      * @return The photo with the given path.
      */
-    public static Photo getPhoto(String path) {
+    public Photo getPhoto(String path) {
+        readPhotos();
         for (Photo photo : photos) {
             if (photo.getPath().equals(path)) {
                 return photo;
@@ -205,7 +233,44 @@ public class DataManager {
      * Adds a user to the users ArrayList.
      * @param username The name of the user to add.
      */
-    public static void addUser(String username) {
+    public void addUser(String username) {
         users.add(new User(username));
+        writeUsers();
+        readAndPrintUsers();
+    }
+
+    /**
+     * Removes a user with the given username from the users ArrayList if it exists.
+     * @param username The username of the user to remove.
+     */
+    public void removeUser(String username) {
+        // Remove the user from the users ArrayList.
+        for (int i = 0; i < users.size(); i++) {
+            if (users.get(i).getUsername().equals(username)) {
+                users.remove(i);
+                break;
+            }
+        }
+        writeUsers();
+        readAndPrintUsers();
+    }
+
+    /**
+     * Adds all users in the users ArrayList to the given ListView.
+     * @param listView The ListView to add the users to.
+     */
+    public void updateUserListView(ListView<String> listView) {
+        readUsers();
+        listView.getItems().clear();
+        for (User user : users) {
+            listView.getItems().add(user.getUsername());
+        }
+    }
+
+    private void readAndPrintUsers() {
+        readUsers();
+        for (User user : users) {
+            System.out.println(user.getUsername());
+        }
     }
 }
