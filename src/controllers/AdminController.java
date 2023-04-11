@@ -2,7 +2,6 @@ package controllers;
 
 import model.User;
 
-import java.io.*;
 
 import java.util.ArrayList;
 import java.util.ResourceBundle;
@@ -11,17 +10,15 @@ import java.net.URL;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
-import javafx.stage.Stage;
+import javafx.scene.control.Alert.AlertType;
 
+import model.DataManager;
 
+import utils.JavaFXUtils;
 
 public class AdminController implements Initializable {
 
@@ -40,128 +37,73 @@ public class AdminController implements Initializable {
     @FXML
     private Button logOutButton;
 
-    private static final String USERS_FILE = "db/users";
-    ArrayList<User> users = new ArrayList<>();
-
-    private ArrayList<User> readArrayListOfUsers(ObjectInputStream ois) throws ClassNotFoundException, IOException {
-        Object deserializedObject = ois.readObject();
-    
-        if (!(deserializedObject instanceof ArrayList)) {
-            throw new ClassCastException("Deserialized object is not an ArrayList.");
-        }
-    
-        ArrayList<?> deserializedList = (ArrayList<?>) deserializedObject;
-        ArrayList<User> users = new ArrayList<>();
-    
-        for (Object element : deserializedList) {
-            if (element instanceof User) {
-                users.add((User) element);
-            } else {
-                throw new ClassCastException("Deserialized object is not an instance of User.");
-            }
-        }
-    
-        return users;
-    }
 
     @FXML
     public void onCreateUser(ActionEvent event) {
-        String newUser = adminUserField.getText().trim();
-        if (newUser.isEmpty()) {
+        String newUsername = adminUserField.getText().trim();
+        if (newUsername.isEmpty()) {
             // Show an error dialog or message
             return;
         }
-    
-        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(USERS_FILE))) {
-            ArrayList<User> users = readArrayListOfUsers(ois);
-    
-            if (users.stream().anyMatch(user -> user.getUsername().equalsIgnoreCase(newUser))) {
-                // Show an error dialog or message indicating the user already exists
-                return;
-            }
-    
-            users.add(new User(newUser));
-            adminUserList.getItems().add(newUser);
-    
-            try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(USERS_FILE))) {
-                oos.writeObject(users);
-            }
-        } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
+        DataManager.readUsers();
+        if (DataManager.isUsernameTaken(newUsername)) {
+            // Show an error dialog or message indicating the user already exists
+            JavaFXUtils.showAlert(AlertType.ERROR, "Error", "Invalid Username", "The username you entered is already registered.");
+            return;
         }
+        // Add the new user to the list of users
+        DataManager.addUser(newUsername);
+
+        // Update the list view
+        adminUserList.getItems().add(newUsername);
+
+        // Write the updated list of users to the file
+        DataManager.writeUsers();
+
+        // Clear the text field
         adminUserField.clear();
     }
 
     @FXML
     public void onDeleteUser(ActionEvent event) {
+
+        // Get the selected user from the list view
         String selectedUser = adminUserList.getSelectionModel().getSelectedItem();
-        if (selectedUser == null || selectedUser.equalsIgnoreCase("admin")) {
-            // Show an error dialog or message indicating that the admin user cannot be deleted
+
+        // Check if the selected user is the admin user or if no user is selected
+        if (selectedUser == null) {
+            // Show an error dialog or message indicating the selected user cannot be deleted
+            JavaFXUtils.showAlert(AlertType.ERROR, "Error", "Invalid Username", "There is no user selected.");
+            return;
+        } else if (selectedUser.equals("admin")) {
+            // Show an error dialog or message indicating the selected user cannot be deleted
+            JavaFXUtils.showAlert(AlertType.ERROR, "Error", "Invalid Username", "The admin cannot be deleted.");
             return;
         }
 
-        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(USERS_FILE))) {
-            ArrayList<User> users = readArrayListOfUsers(ois);
+        // Read the list of users from the file
+        SerializationUtils.readUsers(users);
 
-            users.removeIf(user -> user.getUsername().equalsIgnoreCase(selectedUser));
+        // Remove the user from the list of users if it exists
+        users.removeIf(user -> user.getUsername().equals(selectedUser));
 
-            try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(USERS_FILE))) {
-                oos.writeObject(users);
-            }
-        } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
-        }
+        // Write the updated list of users to the file
+        SerializationUtils.writeUsers(users);
 
+        // Remove the user from the list view
         adminUserList.getItems().remove(selectedUser);
     }
 
     @FXML
     public void onLogOut(ActionEvent event) {
-        // Close the current stage and open the Login stage
-        Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        currentStage.close();
-    
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/Login.fxml"));
-            Parent root = loader.load();
-            Stage loginStage = new Stage();
-            loginStage.setTitle("Photo Library");
-            loginStage.setScene(new Scene(root));
-            loginStage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        JavaFXUtils.switchView(event, "/views/Login.fxml");
     }
 
     @FXML
     public void initialize(URL location, ResourceBundle resources) {
-        File usersFile = new File("db/users");
-        if (!usersFile.exists()) {
-            try {
-                usersFile.getParentFile().mkdirs();
-                usersFile.createNewFile();
-                try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(usersFile))) {
-                    ArrayList<User> users = new ArrayList<>();
-                    users.add(new User("admin"));
-                    oos.writeObject(users);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+        SerializationUtils.readUsers(users);
+        for (User user : users) {
+            adminUserList.getItems().add(user.getUsername());
         }
-    
-        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(usersFile))) {
-            ArrayList<User> users = readArrayListOfUsers(ois);
-            for (User user : users) {
-                adminUserList.getItems().add(user.getUsername());
-            }
-        } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-    }
-    
-
-    
+    }   
 }

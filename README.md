@@ -11,10 +11,9 @@
 - Photo.java
 - Album.java
 - Tag.java
-- DataManager.java
 ---
 ### view
-- ~~Login.fxml~~
+- Login.fxml
 - Admin.fxml
 - User.fxml
 - Album.fxml
@@ -28,24 +27,28 @@
 - AlbumController.java
 - SearchController.java
 ---
+### utils
+---
+- JavaFXUtils.java
+- SerializationUtils.java
+---
+
 # UML Class Description
 
-## User
-### Attributes:
+## ~~User~~
 
-- username: String
-- password: String
-- albums: List\<Album>
+### Attributes:
+- ~~serialVersionUID: long~~
+- ~~username: String~~
+- ~~albums: List\<Album>~~
 ### Operations:
-- login(): boolean
-- logout(): void
-- createUser(username: String, password: String): void
-- deleteUser(username: String): void
-- listUsers(): List<String>
-- createAlbum(name: String): void
-- deleteAlbum(name: String): void
-- renameAlbum(oldName: String, newName: String): void
-- openAlbum(name: String): Album
+- ~~createUser(username: String, password: String): void~~
+- ~~deleteUser(username: String): void~~
+- ~~listUsers(): List<String>~~
+- ~~createAlbum(name: String): void~~
+- ~~deleteAlbum(name: String): void~~
+- ~~renameAlbum(oldName: String, newName: String): void~~
+- ~~openAlbum(name: String): Album~~
 ---
 ## Admin (inherits User)
 ### Attributes:
@@ -154,7 +157,7 @@
 
 ## Login
 
-- User: login()
+- LoginController: handleLoginButtonClick()
 
 ## Admin Subsystem
         

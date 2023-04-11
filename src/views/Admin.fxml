@@ -7,20 +7,20 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #66AA88;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.AdminController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #b2dfdb;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.AdminController">
    <children>
-      <Button fx:id="createUserButton" layoutX="279.0" layoutY="168.0" mnemonicParsing="false" onAction="#onCreateUser" style="-fx-background-color: #194d33;" text="Create User" textFill="WHITE">
+      <Button fx:id="createUserButton" layoutX="279.0" layoutY="168.0" mnemonicParsing="false" onAction="#onCreateUser" style="-fx-background-color: #81c784; -fx-border-color: #000000; -fx-border-width: 2;" text="Create User">
          <font>
             <Font name="Serif Bold" size="18.0" />
          </font>
       </Button>
-      <TextField fx:id="adminUserField" layoutX="279.0" layoutY="73.0" prefHeight="32.0" prefWidth="214.0" style="-fx-background-color: #194d33; -fx-text-fill: #FFFFFF;">
+      <TextField fx:id="adminUserField" layoutX="279.0" layoutY="73.0" prefHeight="32.0" prefWidth="214.0" style="-fx-background-color: #CCCCCC; -fx-text-fill: #000000; -fx-border-color: #000000; -fx-border-width: 2;">
          <font>
             <Font name="Serif Regular" size="18.0" />
          </font>
       </TextField>
-      <ListView fx:id="adminUserList" layoutX="47.0" layoutY="73.0" prefHeight="300.0" prefWidth="200.0" style="-fx-background-color: #194d33;" />
-      <Button fx:id="deleteUserButton" layoutX="279.0" layoutY="268.0" mnemonicParsing="false" onAction="#onDeleteUser" style="-fx-background-color: #bf4040;" text="Delete User" textFill="WHITE">
+      <ListView fx:id="adminUserList" layoutX="47.0" layoutY="73.0" prefHeight="300.0" prefWidth="200.0" style="-fx-background-color: #CCCCCC; -fx-border-color: #000000; -fx-border-width: 2;" />
+      <Button fx:id="deleteUserButton" layoutX="279.0" layoutY="268.0" mnemonicParsing="false" onAction="#onDeleteUser" style="-fx-background-color: #bf4040; -fx-border-color: #000000; -fx-border-width: 2;" text="Delete User">
          <font>
             <Font name="Serif Bold" size="18.0" />
          </font>
@@ -30,7 +30,7 @@
             <Font name="Serif Bold" size="30.0" />
          </font>
       </Label>
-      <Button fx:id="logOutButton" layoutX="493.0" layoutY="341.0" mnemonicParsing="false" onAction="#onLogOut" style="-fx-background-color: #194d33;" text="Log Out" textFill="WHITE">
+      <Button fx:id="logOutButton" layoutX="493.0" layoutY="341.0" mnemonicParsing="false" onAction="#onLogOut" style="-fx-background-color: #999999; -fx-border-color: #000000; -fx-border-width: 2;" text="Log Out">
          <font>
             <Font name="Serif Bold" size="18.0" />
          </font>

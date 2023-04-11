@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #66AA88; -fx-text-fill: #000000;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.LoginController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #b2dfdb;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.LoginController">
    <top>
       <Pane prefHeight="100.0" prefWidth="600.0" BorderPane.alignment="CENTER" />
    </top>
@@ -23,7 +23,7 @@
       <Pane prefHeight="200.0" prefWidth="125.0" BorderPane.alignment="CENTER" />
    </right>
    <center>
-      <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="350.0" style="-fx-background-color: #194D33; -fx-border-width: 4; -fx-border-color: #000000;" BorderPane.alignment="CENTER">
+      <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="350.0" style="-fx-background-color: #FFFFFF; -fx-border-width: 2; -fx-border-color: #000000;" BorderPane.alignment="CENTER">
          <effect>
             <ColorAdjust />
          </effect>
@@ -31,13 +31,16 @@
             <Insets />
          </opaqueInsets>
          <children>
-            <Label alignment="CENTER_RIGHT" layoutX="14.0" layoutY="70.0" prefHeight="30.0" prefWidth="124.0" text="Username:" textAlignment="CENTER" textFill="WHITE">
+            <Label alignment="CENTER_RIGHT" layoutX="14.0" layoutY="70.0" prefHeight="30.0" prefWidth="124.0" text="Username:" textAlignment="CENTER">
                <font>
                   <Font name="Serif Bold" size="25.0" />
                </font>
             </Label>
-            <TextField fx:id="usernameField" layoutX="146.0" layoutY="70.0" prefHeight="30.0" prefWidth="184.0" promptText="Enter username..." style="-fx-background-color: #000000; -fx-text-fill: #FFFFFF;" />
-            <Button fx:id="loginButton" layoutX="133.0" layoutY="130.0" mnemonicParsing="false" onAction="#handleLoginButtonClick" style="-fx-background-color: #000000;" text="Log In" textFill="WHITE">
+            <TextField fx:id="usernameField" layoutX="146.0" layoutY="70.0" prefHeight="30.0" prefWidth="184.0" style="-fx-background-color: #BBBBBB; -fx-text-fill: #000000; -fx-border-color: #000000;">
+               <font>
+                  <Font name="Serif Regular" size="13.0" />
+               </font></TextField>
+            <Button fx:id="loginButton" layoutX="133.0" layoutY="130.0" mnemonicParsing="false" onAction="#handleLoginButtonClick" style="-fx-background-color: #b2dfdb; -fx-border-color: #000000; -fx-border-width: 2;" text="Log In">
                <font>
                   <Font name="Serif Bold" size="21.0" />
                </font>

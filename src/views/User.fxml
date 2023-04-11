@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane fx:id="userPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: #b2dfdb; -fx-border-color: #000000;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.UserController">
+   <children>
+      <ListView fx:id="albumsListView" layoutX="20.0" layoutY="75.0" prefHeight="450.0" prefWidth="250.0" style="-fx-border-color: #000000; -fx-background-color: #CCCCCC; -fx-border-width: 2;" />
+      <Label layoutX="40.0" layoutY="15.0" prefHeight="47.0" prefWidth="189.0" text="Albums">
+         <font>
+            <Font name="Serif Bold" size="42.0" />
+         </font>
+      </Label>
+      <Label layoutX="285.0" layoutY="15.0" prefHeight="50.0" prefWidth="136.0" text="Details">
+         <font>
+            <Font name="Serif Bold" size="42.0" />
+         </font>
+      </Label>
+      <Label layoutX="459.0" layoutY="244.0" prefHeight="50.0" prefWidth="290.0" text="Rename Album">
+         <font>
+            <Font name="Serif Bold" size="42.0" />
+         </font>
+      </Label>
+      <TextField fx:id="userRenameAlbumField" layoutX="459.0" layoutY="294.0" prefHeight="40.0" prefWidth="300.0" style="-fx-border-color: #000000; -fx-background-color: #CCCCCC; -fx-border-width: 2;" />
+      <Button fx:id="userUpdateAlbumButton" layoutX="459.0" layoutY="344.0" mnemonicParsing="false" onAction="#handleUpdateSelectedAlbumButtonClick" prefHeight="30.0" prefWidth="200.0" style="-fx-background-color: #81c784; -fx-border-color: #000000; -fx-border-width: 2;" text="Update Album Name">
+         <font>
+            <Font name="Serif Bold" size="18.0" />
+         </font>
+      </Button>
+      <Label layoutX="455.0" layoutY="392.0" prefHeight="50.0" prefWidth="260.0" text="Create Album">
+         <font>
+            <Font name="Serif Bold" size="42.0" />
+         </font>
+      </Label>
+      <TextField fx:id="userCreateAlbumField" layoutX="455.0" layoutY="442.0" prefHeight="40.0" prefWidth="300.0" style="-fx-border-color: #000000; -fx-background-color: #CCCCCC; -fx-border-width: 2;" />
+      <Button fx:id="userCreateAlbumButton" layoutX="455.0" layoutY="492.0" mnemonicParsing="false" onAction="#handleCreateAlbumButtonClick" prefHeight="30.0" prefWidth="200.0" style="-fx-background-color: #81c784; -fx-border-color: #000000; -fx-border-width: 2;" text="Create New Album">
+         <font>
+            <Font name="Serif Bold" size="18.0" />
+         </font>
+      </Button>
+      <VBox layoutX="290.0" layoutY="75.0" prefHeight="151.0" prefWidth="483.0" style="-fx-border-color: #000000; -fx-border-width: 2; -fx-background-color: #CCCCCC;">
+         <children>
+            <HBox nodeOrientation="RIGHT_TO_LEFT" prefHeight="50.0" prefWidth="400.0" spacing="10.0">
+               <children>
+                  <Label fx:id="selectedAlbumName" nodeOrientation="LEFT_TO_RIGHT" prefHeight="50.0" prefWidth="375.0">
+                     <font>
+                        <Font name="Serif Regular" size="18.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                  </Label>
+                  <Label prefHeight="49.0" prefWidth="125.0" text="Name: ">
+                     <font>
+                        <Font name="Serif Bold" size="18.0" />
+                     </font>
+                  </Label>
+               </children>
+            </HBox>
+            <HBox nodeOrientation="RIGHT_TO_LEFT" prefHeight="50.0" prefWidth="400.0" spacing="10.0">
+               <children>
+                  <Label fx:id="selectedAlbumPhotoCount" nodeOrientation="LEFT_TO_RIGHT" prefHeight="50.0" prefWidth="375.0">
+                     <font>
+                        <Font name="Serif Regular" size="18.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                  </Label>
+                  <Label prefHeight="48.0" prefWidth="125.0" text="Photo Count:">
+                     <font>
+                        <Font name="Serif Bold" size="18.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                  </Label>
+               </children>
+            </HBox>
+            <HBox nodeOrientation="RIGHT_TO_LEFT" prefHeight="50.0" prefWidth="400.0" spacing="10.0">
+               <children>
+                  <Label fx:id="selectedAlbumDateRange" nodeOrientation="LEFT_TO_RIGHT" prefHeight="50.0" prefWidth="375.0">
+                     <font>
+                        <Font name="Serif Regular" size="18.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                  </Label>
+                  <Label prefHeight="50.0" prefWidth="125.0" text="Date Range:">
+                     <font>
+                        <Font name="Serif Bold" size="18.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                  </Label>
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+      <Button fx:id="userOpenAlbumButton" layoutX="452.0" layoutY="26.0" mnemonicParsing="false" onAction="#handleOpenSelectedAlbumButtonClick" prefHeight="38.0" prefWidth="144.0" style="-fx-background-color: #81c784; -fx-border-color: #000000; -fx-border-width: 2;" text="Open Album">
+         <font>
+            <Font name="Serif Bold" size="18.0" />
+         </font>
+      </Button>
+      <Button fx:id="userDeleteAlbumButton" layoutX="625.0" layoutY="26.0" mnemonicParsing="false" onAction="#handleDeleteSelectedAlbumButtonClick" prefHeight="38.0" prefWidth="144.0" style="-fx-background-color: #bf4040; -fx-border-color: #000000; -fx-border-width: 2;" text="Delete Album">
+         <font>
+            <Font name="Serif Bold" size="18.0" />
+         </font>
+      </Button>
+      <Button layoutX="600.0" layoutY="550.0" mnemonicParsing="false" onAction="#handleLogOutButtonClick" prefHeight="50.0" prefWidth="200.0" style="-fx-background-color: #999999; -fx-border-color: #000000; -fx-border-width: 3;" text="Log Out">
+         <font>
+            <Font name="Serif Regular" size="25.0" />
+         </font>
+      </Button>
+      <Button layoutX="300.0" layoutY="550.0" mnemonicParsing="false" onAction="#handleSearchPhotosButtonClick" prefHeight="50.0" prefWidth="300.0" style="-fx-background-color: #e1bee7; -fx-border-color: #000000; -fx-border-width: 3;" text="Search Photos">
+         <font>
+            <Font name="Serif Regular" size="25.0" />
+         </font>
+      </Button>
+      <Button layoutY="550.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="300.0" style="-fx-background-color: #ffecb3; -fx-border-color: #000000; -fx-border-width: 3;" text="View Albums">
+         <font>
+            <Font name="Serif Regular" size="25.0" />
+         </font>
+      </Button>
+   </children>
+</AnchorPane>
