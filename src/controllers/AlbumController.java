@@ -83,21 +83,6 @@ public class AlbumController {
     private Button viewAlbumButton;
 
     @FXML
-    void getNewCaption(ActionEvent event) {
-
-    }
-
-    @FXML
-    void getTagKey(ActionEvent event) {
-
-    }
-
-    @FXML
-    void getTagValue(ActionEvent event) {
-
-    }
-
-    @FXML
     void handleAddPhotoButtonClick(ActionEvent event) {
 
     }
