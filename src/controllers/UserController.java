@@ -181,7 +181,7 @@ public class UserController implements Initializable {
             JavaFXUtils.showAlert(AlertType.ERROR, "Error", "No Album Selected", "You must select an album to open.");
             return;
         }
-        dataManager.setSelectedAlbum(selectedAlbum);
+        dataManager.openAlbum(selectedAlbum);
         JavaFXUtils.switchView(event, "/views/Album.fxml");
     }
 

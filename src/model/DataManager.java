@@ -195,6 +195,7 @@ public class DataManager {
      * Log out the currently logged in user.
      */
     public void logOut() {
+        closeAlbum();
         loggedInUser = null;
     }
 
@@ -253,6 +254,13 @@ public class DataManager {
      */
     public void openAlbum(Album album) {
         openedAlbum = album;
+    }
+
+    /**
+     * Closes the currently opened album.
+     */
+    public void closeAlbum() {
+        openedAlbum = null;
     }
 
     /**

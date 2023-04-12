@@ -39,5 +39,34 @@ public class Tags {
     /**
      * Adds a tag to the list of tags.
      * @param key the key of the tag
+     * @param value the value of the tag
+     * @return the index of the tag in the list of tags on success, -1 on empty key or value, -2 on duplicate tag
      */
+    public int add(String key, String value) {
+        if (key == null || value == null) {
+            return -1;
+        } else if (tags.contains(new Pair<String, String>(key, value))) {
+            return -2;
+        } else {
+            tags.add(new Pair<String, String>(key, value));
+            return tags.indexOf(new Pair<String, String>(key, value));
+        }
+    }
+
+    /**
+     * Deletes a tag from the list of tags.
+     * @param key the key of the tag
+     * @param value the value of the tag
+     * @return the index of the tag in the list of tags on success, -1 on empty key or value, -2 on non-existent tag
+     */
+    public int remove(String key, String value) {
+        if (key == null || value == null) {
+            return -1;
+        } else if (!tags.contains(new Pair<String, String>(key, value))) {
+            return -2;
+        } else {
+            tags.remove(new Pair<String, String>(key, value));
+            return tags.indexOf(new Pair<String, String>(key, value));
+        }
+    }
 }

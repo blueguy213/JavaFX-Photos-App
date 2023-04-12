@@ -78,8 +78,8 @@ public class Photo implements Serializable {
         tags.add(name, value);
     }
 
-    public void removeTag(String name) {
-        tags.remove(name);
+    public void removeTag(String name, String value) {
+        tags.remove(name, value);
     }
 
     /**
