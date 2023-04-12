@@ -12,6 +12,7 @@ import java.util.List;
 
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ListView;
+import javafx.scene.image.ImageView;
 
 import utils.JavaFXUtils;
 
@@ -24,7 +25,8 @@ public class DataManager {
     public static DataManager instance;
 
     private User loggedInUser;
-    private Album selectedAlbum;
+    private Album openedAlbum;
+    private int selectedPhotoIndex;
 
     private ArrayList<User> users;
 
@@ -249,7 +251,25 @@ public class DataManager {
     /**
      * Sets the currently selected album.
      */
-    public void setSelectedAlbum(Album album) {
-        selectedAlbum = album;
+    public void openAlbum(Album album) {
+        openedAlbum = album;
+    }
+
+    /**
+     * Add the given photo to the currently selected album.
+     */
+    public void addPhotoToOpenedAlbum(Photo photo) {
+
+        openedAlbum.addPhoto(photo);
+        writeUsers();
+    }
+
+    /**
+     * Display the selcted photo in the given ImageView.
+     * @param imageView The ImageView to display the photo in.
+     */
+    public void displaySelectedPhoto(ImageView imageView) {
+        Photo selectedPhoto = openedAlbum.getPhotoAtIndex(selectedPhotoIndex);
+        selectedPhoto.displayOn(imageView);
     }
 }

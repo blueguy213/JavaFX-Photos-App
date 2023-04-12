@@ -58,6 +58,14 @@ public class Album implements Serializable {
     }
 
     /**
+     * Get the photo at the given index.
+     * @param index the index of the photo
+     */
+    public Photo getPhotoAtIndex(int index) {
+        return photos.get(index);
+    }
+
+    /**
      * Sets the list of photos in the album.
      * 
      * @param photos the list of photos in the album

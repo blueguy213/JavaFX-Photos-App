@@ -66,6 +66,14 @@ public class User implements Serializable {
     }
 
     /**
+     * Adds the given photo to the list of photos of the user.
+     * @param photo the photo to add
+     */
+    public void addPhoto(Photo photo) {
+        this.photos.add(photo);
+    }
+
+    /**
      * Removes the given album from the list of albums of the user.
      * @param album the album to remove
      */
