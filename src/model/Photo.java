@@ -16,6 +16,7 @@ import utils.ImageUtils;
 
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.util.Pair;
 
 /**
  * This class represents a photo in the application. A photo has a path, caption, date and time, and a dictionary of tags.
@@ -27,7 +28,7 @@ public class Photo implements Serializable {
     private String path;
     private String caption;
     private LocalDateTime dateTime;
-    private Map<String, List<String>> tags;
+    private Tags tags;
 
     /**
      * Creates a new photo with the given path, caption, and date and time.
@@ -38,7 +39,7 @@ public class Photo implements Serializable {
         this.path = path;
         this.caption = caption;
         this.dateTime = ImageUtils.getLastModifiedDateTime(path);
-        this.tags = new HashMap<String, List<String>>();
+        this.tags = new Tags();
     }
 
     /**
@@ -73,29 +74,12 @@ public class Photo implements Serializable {
         return dateTime;
     }
 
-    /**
-     * Returns the list of tags for the photo.
-     * @return the list of tags for the photo.
-     */
-    public List<String> getTags() {
-        return tags.keySet().stream().collect(Collectors.toList());
-    }
-
     public void addTag(String name, String value) {
-        if (this.tags.containsKey(name)) {
-            this.tags.get(name).add(value);
-        } else {
-            this.tags.put(name, new ArrayList<String>());
-            this.tags.get(name).add(value);
-        }
+        tags.add(name, value);
     }
 
     public void removeTag(String name) {
-        this.tags.remove(name);
-    }
-
-    public List<String> getTagValues(String name) {
-        return this.tags.get(name);
+        tags.remove(name);
     }
 
     /**
@@ -108,34 +92,11 @@ public class Photo implements Serializable {
     }
 
     /**
-     * Returns a string representation of the tags.
-     * @return a string representation of the tags
-     */
-    private String printTags() {
-        Iterator<String> it = tags.keySet().iterator();
-        List<String> tempList = null;
-
-        String ret = "";
-
-        while (it.hasNext()) {
-            String key = it.next().toString();             
-            tempList = tags.get(key);
-            if (tempList != null) {
-                for (String value: tempList) {
-                    ret += key + ": " + value + ", ";
-                }
-            }
-        }
-
-        return ret;
-    }
-
-    /**
      * Returns a description of the photo.
      * @return a description of the photo as a string
      */
     public String getDescription() {
-        String oneLineResponse = "Caption: " + caption + "Datetime: " + dateTime.toString() + "Tags: " + printTags();
+        String oneLineResponse = "Caption: " + caption + "Datetime: " + dateTime + "Tags: " + tags;
         String response = "";
         for (int i = 0; i < oneLineResponse.length(); i += 50) {
             response += oneLineResponse.substring(i, Math.min(i + 50, oneLineResponse.length())) + "\n";
