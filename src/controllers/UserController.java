@@ -191,7 +191,9 @@ public class UserController implements Initializable {
      */
     @FXML
     public void handleSearchPhotosButtonClick(ActionEvent event) {
+        System.out.println("Search Photos button clicked");
         // Switch to the Search view
+        JavaFXUtils.switchView(event, "/views/Search.fxml");
     }
 
     /**
