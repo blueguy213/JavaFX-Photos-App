@@ -1,6 +1,10 @@
 package controllers;
+import java.net.URL;
+import java.util.ResourceBundle;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
@@ -10,8 +14,10 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
+import model.DataManager;
+import utils.JavaFXUtils;
 
-public class AlbumController {
+public class AlbumController implements Initializable{
 
     /**
      * The button for adding a photo to the album.
@@ -151,9 +157,10 @@ public class AlbumController {
     @FXML
     private Button viewAlbumButton;
 
+    private DataManager dataManager;
     @FXML
     void handleAddPhotoButtonClick(ActionEvent event) {
-
+        
     }
 
     @FXML
@@ -173,7 +180,12 @@ public class AlbumController {
 
     @FXML
     void handleLogOutButtonClick(ActionEvent event) {
-
+        
+        // Save the user data
+        dataManager.writeUsers();
+        // Set the loggedInUser to null and switch to the Login view
+        dataManager.logOut();
+        JavaFXUtils.switchView(event, "/views/Login.fxml");
     }
 
     @FXML
@@ -183,7 +195,9 @@ public class AlbumController {
 
     @FXML
     void handleNextPhotoButtonClick(ActionEvent event) {
-
+        // DataManager dmInstance = DataManager.getInstance();
+        // dmInstance.selectedAlbum
+        
     }
 
     @FXML
@@ -198,7 +212,7 @@ public class AlbumController {
 
     @FXML
     void handleSearchPhotosButtonClick(ActionEvent event) {
-
+        JavaFXUtils.switchView(event, "/views/Search.fxml");
     }
 
     @FXML
@@ -208,7 +222,12 @@ public class AlbumController {
 
     @FXML
     void handleViewAlbumButtonClick(ActionEvent event) {
+        JavaFXUtils.switchView(event, "/views/User.fxml");
+    }
 
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        dataManager = DataManager.getInstance();
     }
 
 }

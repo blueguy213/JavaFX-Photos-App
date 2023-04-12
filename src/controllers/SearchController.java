@@ -1,6 +1,10 @@
 package controllers;
+
+import java.net.URL;
+import java.util.ResourceBundle;
+
 import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
+
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
@@ -10,8 +14,15 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
+import model.DataManager;
+import javafx.fxml.Initializable;
+import javafx.fxml.FXML;
 
-public class SearchController {
+
+import utils.JavaFXUtils;
+
+
+public class SearchController implements Initializable {
 
     @FXML
     private Label albumNameLable;
@@ -76,10 +87,7 @@ public class SearchController {
     @FXML
     private Button viewAlbumButton;
 
-    private String endDateInput;
-    private String startDateInput;
-    private String firstTagInput;
-    private String secondTagInput;
+    private DataManager dataManager;
 
   
     /**
@@ -109,12 +117,16 @@ public class SearchController {
 
     @FXML
     void handleLogOutButtonClick(ActionEvent event) {
-
+        // Save the user data
+        dataManager.writeUsers();
+        // Set the loggedInUser to null and switch to the Login view
+        dataManager.logOut();
+        JavaFXUtils.switchView(event, "/views/Login.fxml");
     }
 
     @FXML
     void handleNextPhotoButtonClick(ActionEvent event) {
-
+        
     }
 
     @FXML
@@ -135,7 +147,12 @@ public class SearchController {
 
     @FXML
     void handleViewAlbumButtonClick(ActionEvent event) {
+        JavaFXUtils.switchView(event, "/views/User.fxml");
+    }
 
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        dataManager = DataManager.getInstance();
     }
 
 }
