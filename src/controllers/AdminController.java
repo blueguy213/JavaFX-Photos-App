@@ -1,9 +1,5 @@
 package controllers;
 
-import model.User;
-
-
-import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 import java.net.URL;
@@ -43,8 +39,9 @@ public class AdminController implements Initializable {
     public void onCreateUser(ActionEvent event) {
 
         String newUsername = adminUserField.getText().trim();
-        if (newUsername.isEmpty()) {
+        if (newUsername.isEmpty() || newUsername.equals("admin")) {
             // Show an error dialog or message
+            JavaFXUtils.showAlert(AlertType.ERROR, "Error", "Invalid Username", "The username you entered is invalid.");
             return;
         }
 

@@ -1,20 +1,14 @@
 package controllers;
 
-import java.util.ArrayList;
-
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Button;
 import javafx.scene.control.Alert.AlertType;
 import javafx.event.ActionEvent;
 
-import model.User;
-import model.Album;
-import model.Photo;
 import model.DataManager;
 
 import utils.JavaFXUtils;
-import utils.ImageUtils;
 
 public class LoginController {
     
@@ -46,7 +40,7 @@ public class LoginController {
 
         if (dataManager.isUsernameTaken(username)) {
             viewPath = "/views/User.fxml";
-            UserController.setLoggedInUser(dataManager.getUser(username));
+            dataManager.logIn(username);
             JavaFXUtils.switchView(event, viewPath);
             return;
         } else {

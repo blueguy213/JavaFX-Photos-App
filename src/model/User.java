@@ -14,6 +14,7 @@ public class User implements Serializable {
 
     private String username;
     private List<Album> albums;
+    private List<Photo> photos;
 
     /**
      * Creates a new user with the given username.

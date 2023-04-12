@@ -6,11 +6,6 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.Instant;
 
-import java.util.ArrayList;
-
-import model.User;
-import model.Photo;
-
 /**
  * This class contains utility methods for working with image files.
  * @author Sree Kommalapati and Shreeti Patel
@@ -33,21 +28,4 @@ public class ImageUtils {
     
         return lastModifiedDateTime;
     }
-
-    // /**
-    //  * Creates and loads all stock images from db/stock/* into the given user's 'stock' album.
-    //  * @param user the user to load the stock images into
-    //  */
-    // public static void addStockPhotos(User user) {
-    //     ArrayList<String> stockPhotoPaths = new ArrayList<String>();
-    //     stockPhotoPaths.add("db/stock/Erin_Chibi.jpg");
-    //     stockPhotoPaths.add("db/stock/Pisces_bonehorror.jpeg");
-    //     // stockPhotoPaths.add("db/stock/stock3.jpg");
-    //     // stockPhotoPaths.add("db/stock/stock4.jpg");
-    //     // stockPhotoPaths.add("db/stock/stock5.jpg");
-
-    //     for (String path : stockPhotoPaths) {
-    //         user.getAlbumByName("stock").addPhoto(new Photo(path, "Stock Photo"));
-    //     }
-    // }
 }
