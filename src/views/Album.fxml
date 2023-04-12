@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane fx:id="albumPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: #b2dfdb; -fx-border-color: #000000;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="AlbumController">
+   <children>
+      <ListView fx:id="photoThumbListView" layoutX="22.0" layoutY="69.0" prefHeight="450.0" prefWidth="175.0" style="-fx-border-color: #000000; -fx-background-color: #CCCCCC; -fx-border-width: 2;" />
+      <Label fx:id="albumNameLable" layoutX="22.0" layoutY="14.0" prefHeight="47.0" prefWidth="189.0" text="Album Name">
+         <font>
+            <Font name="Serif Bold" size="30.0" />
+         </font>
+      </Label>
+      <Button fx:id="logOutButton" layoutX="600.0" layoutY="550.0" mnemonicParsing="false" onAction="#handleLogOutButtonClick" prefHeight="50.0" prefWidth="200.0" style="-fx-background-color: #999999; -fx-border-color: #000000; -fx-border-width: 3;" text="Log Out">
+         <font>
+            <Font name="Serif Regular" size="25.0" />
+         </font>
+      </Button>
+      <Button fx:id="searchPhotoButton" layoutX="300.0" layoutY="550.0" mnemonicParsing="false" onAction="#handleSearchPhotosButtonClick" prefHeight="50.0" prefWidth="300.0" style="-fx-background-color: #e1bee7; -fx-border-color: #000000; -fx-border-width: 3;" text="Search Photos">
+         <font>
+            <Font name="Serif Regular" size="25.0" />
+         </font>
+      </Button>
+      <Button fx:id="viewAlbumButton" layoutY="550.0" mnemonicParsing="false" onAction="#handleViewAlbumButtonClick" prefHeight="50.0" prefWidth="300.0" style="-fx-background-color: #ffecb3; -fx-border-color: #000000; -fx-border-width: 3;" text="View Albums">
+         <font>
+            <Font name="Serif Regular" size="25.0" />
+         </font>
+      </Button>
+      <VBox layoutX="557.0" layoutY="69.0" prefHeight="461.0" prefWidth="229.0">
+         <children>
+            <HBox prefHeight="39.0" prefWidth="279.0">
+               <children>
+                  <Button fx:id="addPhotoButton" mnemonicParsing="false" onAction="#handleAddPhotoButtonClick" prefHeight="32.0" prefWidth="112.0" style="-fx-background-color: #81c784; -fx-border-color: #000000; -fx-border-width: 2;" text="Add Photo">
+                     <font>
+                        <Font name="Serif Bold" size="15.0" />
+                     </font>
+                  </Button>
+                  <Pane prefHeight="39.0" prefWidth="22.0" />
+                  <Button fx:id="removePhotoButton" mnemonicParsing="false" onAction="#handleRemovePhotoButtonClick" prefHeight="32.0" prefWidth="131.0" style="-fx-background-color: #bf4040; -fx-border-color: #000000; -fx-border-width: 2;" text="Remove Photo">
+                     <font>
+                        <Font name="Serif Bold" size="15.0" />
+                     </font>
+                  </Button>
+               </children>
+            </HBox>
+            <Label prefHeight="32.0" prefWidth="109.0" text="Edit Caption:">
+               <font>
+                  <Font name="Serif Bold" size="17.0" />
+               </font>
+            </Label>
+            <TextField fx:id="newCaptionField" onAction="#getNewCaption" prefHeight="30.0" prefWidth="253.0" promptText="New Caption" style="-fx-border-color: #000000; -fx-background-color: #CCCCCC; -fx-border-width: 2;" />
+            <Pane prefHeight="12.0" prefWidth="253.0" />
+            <Button fx:id="updateCaptionButton" mnemonicParsing="false" onAction="#handleUpdateCaptionButtonClick" prefHeight="34.0" prefWidth="256.0" style="-fx-background-color: #81c784; -fx-border-color: #000000; -fx-border-width: 2;" text="Update Caption">
+               <font>
+                  <Font name="Serif Bold" size="16.0" />
+               </font>
+            </Button>
+            <Pane prefHeight="12.0" prefWidth="253.0" />
+            <Label prefHeight="32.0" prefWidth="109.0" text="Add Tag:">
+               <font>
+                  <Font name="Serif Bold" size="17.0" />
+               </font>
+            </Label>
+            <HBox prefHeight="39.0" prefWidth="279.0">
+               <children>
+                  <TextField fx:id="addTagKeyField" onAction="#getTagKey" prefHeight="30.0" prefWidth="129.0" promptText="Tag Key" style="-fx-border-color: #000000; -fx-background-color: #CCCCCC; -fx-border-width: 2;" />
+                  <Pane prefHeight="39.0" prefWidth="14.0" />
+                  <TextField fx:id="addTagValueField" onAction="#getTagValue" prefHeight="30.0" prefWidth="123.0" promptText="Tag Value" style="-fx-border-color: #000000; -fx-background-color: #CCCCCC; -fx-border-width: 2;" />
+               </children>
+            </HBox>
+            <Button fx:id="addTagButton" mnemonicParsing="false" onAction="#handleAddTagButtonClick" prefHeight="34.0" prefWidth="260.0" style="-fx-background-color: #81c784; -fx-border-color: #000000; -fx-border-width: 2;" text="Add Tag">
+               <font>
+                  <Font name="Serif Bold" size="16.0" />
+               </font>
+            </Button>
+            <Label prefHeight="32.0" prefWidth="109.0" text="Delete Tag:">
+               <font>
+                  <Font name="Serif Bold" size="17.0" />
+               </font>
+            </Label>
+            <HBox prefHeight="44.0" prefWidth="253.0">
+               <children>
+                  <ChoiceBox fx:id="selectTagToDeleteChoiceBox" prefHeight="26.0" prefWidth="132.0" />
+                  <Pane prefHeight="39.0" prefWidth="22.0" />
+                  <Button fx:id="deleteTagButton" mnemonicParsing="false" onAction="#handleDeleteTagButtonClick" prefHeight="32.0" prefWidth="126.0" style="-fx-background-color: #bf4040; -fx-border-color: #000000; -fx-border-width: 2;" text="Delete Tag">
+                     <font>
+                        <Font name="Serif Bold" size="15.0" />
+                     </font>
+                  </Button>
+               </children>
+            </HBox>
+            <Label prefHeight="36.0" prefWidth="253.0" text="Copy or Move Photo ">
+               <font>
+                  <Font name="Serif Bold" size="18.0" />
+               </font>
+            </Label>
+            <ChoiceBox fx:id="destinationAlbumChoiceBox" prefHeight="26.0" prefWidth="238.0" />
+            <Pane prefHeight="12.0" prefWidth="253.0" />
+            <HBox prefHeight="44.0" prefWidth="253.0">
+               <children>
+                  <Button fx:id="copyPhotoButton" mnemonicParsing="false" onAction="#handleCopyPhotoButtonClick" prefHeight="36.0" prefWidth="131.0" style="-fx-background-color: #81c784; -fx-border-color: #000000; -fx-border-width: 2;" text="Copy">
+                     <font>
+                        <Font name="Serif Bold" size="18.0" />
+                     </font>
+                  </Button>
+                  <Pane prefHeight="39.0" prefWidth="22.0" />
+                  <Button fx:id="movePhotoButton" mnemonicParsing="false" onAction="#handleMovePhotoButtonClick" prefHeight="36.0" prefWidth="135.0" style="-fx-background-color: #81c784; -fx-border-color: #000000; -fx-border-width: 2;" text="Move">
+                     <font>
+                        <Font name="Serif Bold" size="18.0" />
+                     </font>
+                  </Button>
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+      <Pane fx:id="photoDisplayPane" layoutX="212.0" layoutY="69.0" prefHeight="223.0" prefWidth="335.0" style="-fx-background-color: #CCCCCC; -fx-border-color: #000000;" />
+      <ListView fx:id="photoCaptionListView" layoutX="213.0" layoutY="307.0" prefHeight="99.0" prefWidth="335.0" style="-fx-border-color: #000000; -fx-background-color: #CCCCCC; -fx-border-width: 2;" />
+      <Button fx:id="nextPhotoButton" layoutX="414.0" layoutY="445.0" mnemonicParsing="false" onAction="#handleNextPhotoButtonClick" prefHeight="36.0" prefWidth="72.0" style="-fx-border-color: #000000; -fx-border-width: 2;" text="Next">
+         <font>
+            <Font name="Serif Bold" size="18.0" />
+         </font>
+      </Button>
+      <Button fx:id="prevPhotoButton" layoutX="264.0" layoutY="445.0" mnemonicParsing="false" onAction="#handlePrevPhotoButtonClick" prefHeight="36.0" prefWidth="72.0" style="-fx-border-color: #000000; -fx-border-width: 2;" text="Prev">
+         <font>
+            <Font name="Serif Bold" size="18.0" />
+         </font>
+      </Button>
+   </children>
+</AnchorPane>
