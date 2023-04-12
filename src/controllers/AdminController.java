@@ -37,28 +37,26 @@ public class AdminController implements Initializable {
     @FXML
     private Button logOutButton;
 
+    private DataManager dataManager;
 
     @FXML
     public void onCreateUser(ActionEvent event) {
+
         String newUsername = adminUserField.getText().trim();
         if (newUsername.isEmpty()) {
             // Show an error dialog or message
             return;
         }
-        DataManager.readUsers();
-        if (DataManager.isUsernameTaken(newUsername)) {
+
+        if (dataManager.isUsernameTaken(newUsername)) {
             // Show an error dialog or message indicating the user already exists
             JavaFXUtils.showAlert(AlertType.ERROR, "Error", "Invalid Username", "The username you entered is already registered.");
             return;
         }
-        // Add the new user to the list of users
-        DataManager.addUser(newUsername);
 
-        // Update the list view
-        adminUserList.getItems().add(newUsername);
-
-        // Write the updated list of users to the file
-        DataManager.writeUsers();
+        // Add the new user to the list of users and update the list view
+        dataManager.addUser(newUsername);
+        dataManager.updateUserListView(adminUserList);
 
         // Clear the text field
         adminUserField.clear();
@@ -81,17 +79,9 @@ public class AdminController implements Initializable {
             return;
         }
 
-        // Read the list of users from the file
-        SerializationUtils.readUsers(users);
-
-        // Remove the user from the list of users if it exists
-        users.removeIf(user -> user.getUsername().equals(selectedUser));
-
-        // Write the updated list of users to the file
-        SerializationUtils.writeUsers(users);
-
-        // Remove the user from the list view
-        adminUserList.getItems().remove(selectedUser);
+        // Remove the user from the list of users if it exists and update the list view
+        dataManager.removeUser(selectedUser);
+        dataManager.updateUserListView(adminUserList);
     }
 
     @FXML
@@ -101,9 +91,7 @@ public class AdminController implements Initializable {
 
     @FXML
     public void initialize(URL location, ResourceBundle resources) {
-        SerializationUtils.readUsers(users);
-        for (User user : users) {
-            adminUserList.getItems().add(user.getUsername());
-        }
+        dataManager = DataManager.getInstance();
+        dataManager.updateUserListView(adminUserList);
     }   
 }
