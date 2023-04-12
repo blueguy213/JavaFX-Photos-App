@@ -8,6 +8,7 @@ import java.io.ObjectInputStream;
 import java.io.File;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ListView;
@@ -21,17 +22,18 @@ import utils.JavaFXUtils;
 public class DataManager {
 
     public static DataManager instance;
+
+    private User loggedInUser;
+    private Album selectedAlbum;
+
     private ArrayList<User> users;
-    private ArrayList<Photo> photos;
 
     /**
      * Create a new DataManager object.
      */
     private DataManager() {
         users = new ArrayList<User>();
-        photos = new ArrayList<Photo>();
         readUsers();
-        // readPhotos();
     }
 
     /**
@@ -62,11 +64,8 @@ public class DataManager {
             if (!usersFile.exists()) {
                 usersFile.getParentFile().mkdirs();
                 usersFile.createNewFile();
-                User stockUser = new User("stock");
                 users.clear();
-                users.add(stockUser);
                 writeUsers();
-                System.out.println("Created stock user");
                 return;
             }
 
@@ -97,54 +96,6 @@ public class DataManager {
     }
 
     /**
-     * Reads the users from the users file and adds them to the users ArrayList.
-     * @param users The ArrayList to add the users to.
-     * 
-     * @throws IOException If the file cannot be read.
-     * @throws ClassNotFoundException If the file cannot be deserialized.
-     * 
-     * @see java.io.ObjectInputStream
-     * @see java.io.FileInputStream
-     * @see java.io.File
-     */
-    public void readPhotos() {
-        try {
-            File photosFile = new File("db/photos");
-            if (!photosFile.exists()) {
-                photosFile.getParentFile().mkdirs();
-                photosFile.createNewFile();
-                ArrayList<Photo> defaultPhotos = new ArrayList<Photo>();
-                defaultPhotos.add(new Photo("db/stock/Erin_Chibi.jpg", "Erin_Chibi by platinumft"));
-                defaultPhotos.add(new Photo("db/stock/Pisces_bonehorror.jpg", "Pisces_bonehorror by Jawjee"));
-                writePhotos(defaultPhotos);
-            }
-
-            FileInputStream fis = new FileInputStream(photosFile);
-            ObjectInputStream ois = new ObjectInputStream(fis);
-            Object deserializedObject = ois.readObject();
-            
-            if (!(deserializedObject instanceof ArrayList)) {
-                ois.close();
-                JavaFXUtils.showAlert(AlertType.ERROR, "Error", "Invalid File", "The photo file you are trying to read is not valid.");
-            }
-
-            ArrayList<?> deserializedList = (ArrayList<?>) deserializedObject;
-            
-            for (Object element : deserializedList) {
-                if (element instanceof Photo) {
-                    photos.add((Photo) element);
-                } else {
-                    ois.close();
-                    JavaFXUtils.showAlert(AlertType.ERROR, "Error", "Invalid File", "The photo file you are trying to read is not valid.");
-                }
-            }
-            ois.close();
-        } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
      * Writes the users to the db/users file.
      * @param users The ArrayList containing the users to write.
      * 
@@ -158,26 +109,6 @@ public class DataManager {
         File usersFile = new File("db/users");
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(usersFile))) { 
             oos.writeObject(users);
-            oos.flush();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * Writes the users to the db/photos file.
-     * @param photos The ArrayList containing the photos to write.
-     * 
-     * @throws IOException If the file cannot be written to.
-     * 
-     * @see java.io.ObjectOutputStream
-     * @see java.io.FileOutputStream
-     * @see java.io.File
-     */
-    public void writePhotos(ArrayList<Photo> photos) {
-        File photosFile = new File("db/photos");
-        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(photosFile))) { 
-            oos.writeObject(photos);
             oos.flush();
         } catch (IOException e) {
             e.printStackTrace();
@@ -215,28 +146,12 @@ public class DataManager {
     }
 
     /**
-     * Gets the photo with the given path.
-     * @param path The path of the photo to get.
-     * @return The photo with the given path.
-     */
-    public Photo getPhoto(String path) {
-        readPhotos();
-        for (Photo photo : photos) {
-            if (photo.getPath().equals(path)) {
-                return photo;
-            }
-        }
-        return null;
-    }
-
-    /**
      * Adds a user to the users ArrayList.
      * @param username The name of the user to add.
      */
     public void addUser(String username) {
         users.add(new User(username));
         writeUsers();
-        readAndPrintUsers();
     }
 
     /**
@@ -252,7 +167,6 @@ public class DataManager {
             }
         }
         writeUsers();
-        readAndPrintUsers();
     }
 
     /**
@@ -267,10 +181,75 @@ public class DataManager {
         }
     }
 
-    private void readAndPrintUsers() {
-        readUsers();
-        for (User user : users) {
-            System.out.println(user.getUsername());
+    /**
+     * Log in the user with the given username.
+     * @param username The username of the user to log in.
+     */
+    public void logIn(String username) {
+        loggedInUser = getUser(username);
+    }
+
+    /**
+     * Log out the currently logged in user.
+     */
+    public void logOut() {
+        loggedInUser = null;
+    }
+
+    /**
+     * Returns all the albums for the user that is currently logged in.
+     * @return The albums for the user that is currently logged in.
+     */
+    public List<Album> getCurrentUserAlbums() {
+        return loggedInUser.getAlbums();
+    }
+
+    /**
+     * Updates the given ListView with all the albums for the user that is currently logged in.
+     * @param listView The ListView to update.
+     */
+    public void updateAlbumListView(ListView<Album> listView) {
+        listView.getItems().clear();
+        for (Album album : loggedInUser.getAlbums()) {
+            listView.getItems().add(album);
         }
+    }
+
+    /**
+     * Checks if the given album name is already taken by the user that is currently logged in.
+     * @param albumName The album name to check.
+     */
+    public boolean isAlbumNameTaken(String albumName) {
+        for (Album album : loggedInUser.getAlbums()) {
+            if (album.getName().equals(albumName)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Adds an album with the given name to the user that is currently logged in.
+     * @param albumName The name of the album to add.
+     */
+    public void addAlbum(Album album) {
+        loggedInUser.addAlbum(album);
+        writeUsers();
+    }
+
+    /**
+     * Removes the album with the given name from the user that is currently logged in.
+     * @param albumName The name of the album to remove.
+     */
+    public void removeAlbum(Album album) {
+        loggedInUser.removeAlbum(album);
+        writeUsers();
+    }
+
+    /**
+     * Sets the currently selected album.
+     */
+    public void setSelectedAlbum(Album album) {
+        selectedAlbum = album;
     }
 }
