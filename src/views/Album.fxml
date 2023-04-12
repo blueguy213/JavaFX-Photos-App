@@ -57,7 +57,7 @@
                   <Font name="Serif Bold" size="17.0" />
                </font>
             </Label>
-            <TextField fx:id="newCaptionField" onAction="#getNewCaption" prefHeight="30.0" prefWidth="253.0" promptText="New Caption" style="-fx-border-color: #000000; -fx-background-color: #CCCCCC; -fx-border-width: 2;" />
+            <TextField fx:id="newCaptionField" prefHeight="30.0" prefWidth="253.0" promptText="New Caption" style="-fx-border-color: #000000; -fx-background-color: #CCCCCC; -fx-border-width: 2;" />
             <Pane prefHeight="12.0" prefWidth="253.0" />
             <Button fx:id="updateCaptionButton" mnemonicParsing="false" onAction="#handleUpdateCaptionButtonClick" prefHeight="34.0" prefWidth="256.0" style="-fx-background-color: #81c784; -fx-border-color: #000000; -fx-border-width: 2;" text="Update Caption">
                <font>
@@ -72,9 +72,9 @@
             </Label>
             <HBox prefHeight="39.0" prefWidth="279.0">
                <children>
-                  <TextField fx:id="addTagKeyField" onAction="#getTagKey" prefHeight="30.0" prefWidth="129.0" promptText="Tag Key" style="-fx-border-color: #000000; -fx-background-color: #CCCCCC; -fx-border-width: 2;" />
+                  <TextField fx:id="addTagKeyField" prefHeight="30.0" prefWidth="129.0" promptText="Tag Key" style="-fx-border-color: #000000; -fx-background-color: #CCCCCC; -fx-border-width: 2;" />
                   <Pane prefHeight="39.0" prefWidth="14.0" />
-                  <TextField fx:id="addTagValueField" onAction="#getTagValue" prefHeight="30.0" prefWidth="123.0" promptText="Tag Value" style="-fx-border-color: #000000; -fx-background-color: #CCCCCC; -fx-border-width: 2;" />
+                  <TextField fx:id="addTagValueField" prefHeight="30.0" prefWidth="123.0" promptText="Tag Value" style="-fx-border-color: #000000; -fx-background-color: #CCCCCC; -fx-border-width: 2;" />
                </children>
             </HBox>
             <Button fx:id="addTagButton" mnemonicParsing="false" onAction="#handleAddTagButtonClick" prefHeight="34.0" prefWidth="260.0" style="-fx-background-color: #81c784; -fx-border-color: #000000; -fx-border-width: 2;" text="Add Tag">
@@ -137,9 +137,9 @@
             <Font name="Serif Bold" size="18.0" />
          </font>
       </Button>
-      <ScrollPane hbarPolicy="NEVER" hmax="184.0" layoutX="17.0" layoutY="69.0" prefHeight="467.0" prefWidth="184.0" vmax="1000.0" vmin="200.0">
+      <ScrollPane fx:id="photoThumbScrollPane" hbarPolicy="NEVER" hmax="184.0" layoutX="17.0" layoutY="69.0" prefHeight="467.0" prefWidth="184.0" vmax="1000.0" vmin="200.0">
         <content>
-          <AnchorPane fx:id="photoThumbScrollPane" minHeight="0.0" minWidth="0.0" prefHeight="466.0" prefWidth="169.0" />
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="466.0" prefWidth="169.0" />
         </content>
       </ScrollPane>
    </children>
