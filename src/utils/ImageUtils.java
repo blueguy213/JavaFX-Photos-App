@@ -18,7 +18,7 @@ public class ImageUtils {
     public static LocalDateTime getLastModifiedDateTime(String path) {
 
         // Create a File object from the path
-        File file = new File(path);
+        File file = new File(path.substring(5));
 
         // Read the file's last modified time in milliseconds since the Unix epoch
         long lastModifiedEpochMillis = file.lastModified();

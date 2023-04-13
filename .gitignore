@@ -21,8 +21,14 @@
 
 # Output directories
 bin/
+bin/*
 target/
+target/*
 out/
+out/*
 build/
+build/*
 dist/
+dist/*
 db/
+db/*

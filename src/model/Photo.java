@@ -51,6 +51,14 @@ public class Photo implements Serializable {
     }
 
     /**
+     * Returns the datetime of the photo.
+     * @return the datetime of the photo
+     */
+    public LocalDateTime getDate() {
+        return dateTime;
+    }
+
+    /**
      * Sets the caption of the photo.
      * @param caption the caption of the photo
      */
@@ -79,7 +87,7 @@ public class Photo implements Serializable {
      * @param imageView the JavaFX ImageView to display the photo in
      */
     public void displayOn(ImageView imageView) {
-        Image image = new Image("file:" + path);
+        Image image = new Image(path);
         imageView.setImage(image);
     }
 
@@ -88,10 +96,18 @@ public class Photo implements Serializable {
      * @return a description of the photo as a string
      */
     public String getDescription() {
-        String oneLineResponse = "Caption: " + caption + "Datetime: " + dateTime + "Tags: " + tags;
+        String oneLineResponse = "Caption: " + caption + "\nDatetime: " + dateTime + "\nTags: " + tags;
         String response = "";
-        for (int i = 0; i < oneLineResponse.length(); i += 50) {
-            response += oneLineResponse.substring(i, Math.min(i + 50, oneLineResponse.length())) + "\n";
+        int lineCount = 0;
+        for (int i = 0; i < oneLineResponse.length(); i ++) {
+            if (oneLineResponse.charAt(i) == '\n') {
+                lineCount = 0;
+            }
+            if (lineCount == 50) {
+                response += "\n";
+            }
+            response += oneLineResponse.substring(i, i + 1);
+            lineCount++;
         }
         return response;
     }

@@ -1,23 +1,28 @@
 package controllers;
 
 import java.net.URL;
+
 import java.util.ResourceBundle;
 
+import java.time.LocalDate;
+
 import javafx.event.ActionEvent;
+
+import javafx.scene.layout.TilePane;
 
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.TextArea;
+
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Pane;
-import model.DataManager;
+
 import javafx.fxml.Initializable;
 import javafx.fxml.FXML;
 
+import model.DataManager;
 
 import utils.JavaFXUtils;
 
@@ -26,9 +31,6 @@ public class SearchController implements Initializable {
 
     @FXML
     private Label albumNameLable;
-
-    @FXML
-    private AnchorPane albumPane;
 
     @FXML
     private ChoiceBox<String> andOrChoiceBox;
@@ -43,10 +45,10 @@ public class SearchController implements Initializable {
     private ChoiceBox<String> firstTagChoiceBox;
 
     @FXML
-    private TextField firstTagField;
+    private DatePicker startDatePicker;
 
     @FXML
-    private TextField endDateField;
+    private DatePicker endDatePicker;
 
     @FXML
     private Button logOutButton;
@@ -55,16 +57,10 @@ public class SearchController implements Initializable {
     private Button nextPhotoButton;
 
     @FXML
-    private ListView<String> photoCaptionListView;
+    private TextArea photoDescriptionTextArea;
 
     @FXML
     private ImageView photoDisplayImageView;
-
-    @FXML
-    private Pane photoDisplayPane;
-
-    @FXML
-    private ScrollPane photoThumbScrollPane;
 
     @FXML
     private Button prevPhotoButton;
@@ -76,16 +72,19 @@ public class SearchController implements Initializable {
     private ChoiceBox<String> secondTagChoiceBox;
 
     @FXML
-    private TextField secondTagField;
+    private TextField firstTagField;
 
     @FXML
-    private TextField startDateField;
+    private TextField secondTagField;
 
     @FXML
     private Button tagSearchButton;
 
     @FXML
     private Button viewAlbumButton;
+
+    @FXML
+    private TilePane thumbnailTilePane;
 
     private DataManager dataManager;
 
@@ -94,19 +93,13 @@ public class SearchController implements Initializable {
      */
     @FXML
     void handleDateSearchButtonClick(ActionEvent event) {
-        // if both start and end are given, get within range
-        if ((!startDateField.getText().isEmpty())&&(!endDateField.getText().isEmpty())){
-            // search for photos in range
-            
-        }
-        if ((!startDateField.getText().isEmpty())&&(endDateField.getText().isEmpty())){ //if only start is given get all photos after start date
-            // search for photos in range
-        }
-        if ((startDateField.getText().isEmpty())&&(!endDateField.getText().isEmpty())){ // if only end is given, get all photos before end date
-            // search for photos in range
-        }
-       
+        
+        LocalDate startDate = startDatePicker.getValue();
+        LocalDate endDate = endDatePicker.getValue();
 
+        dataManager.filterSearchResultsByDateRange(startDate, endDate);
+
+        dataManager.displayThumbnailsOn(thumbnailTilePane);
     }
 
     @FXML
@@ -125,12 +118,14 @@ public class SearchController implements Initializable {
 
     @FXML
     void handleNextPhotoButtonClick(ActionEvent event) {
-        
+        dataManager.nextPhoto();
+        dataManager.displaySelectedPhotoOn(photoDisplayImageView, photoDescriptionTextArea);
     }
 
     @FXML
     void handlePrevPhotoButtonClick(ActionEvent event) {
-
+        dataManager.previousPhoto();
+        dataManager.displaySelectedPhotoOn(photoDisplayImageView, photoDescriptionTextArea);
     }
 
     @FXML
@@ -152,7 +147,8 @@ public class SearchController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         dataManager = DataManager.getInstance();
-        dataManager.displaySelectedPhotoOn(photoDisplayImageView);
+        dataManager.prepareSearchResults();
+        dataManager.displaySelectedPhotoOn(photoDisplayImageView, photoDescriptionTextArea);
+        dataManager.displayThumbnailsOn(thumbnailTilePane);
     }
-
 }

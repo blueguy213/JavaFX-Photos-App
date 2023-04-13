@@ -138,7 +138,7 @@ public class UserController implements Initializable {
         }
         dataManager.removeAlbum(selectedAlbum);
         albumsListView.getItems().remove(selectedAlbum);
-        albumsListView.getSelectionModel().selectFirst();
+        updateAlbumInfo(albumsListView.getSelectionModel().getSelectedItem());
     }
 
     /**
@@ -173,7 +173,6 @@ public class UserController implements Initializable {
      */
     @FXML
     public void handleOpenSelectedAlbumButtonClick(ActionEvent event) {
-        System.out.println("Open Album button clicked");
         // Implement the logic for opening the selected album
         Album selectedAlbum = albumsListView.getSelectionModel().getSelectedItem();
         if (selectedAlbum == null) {
@@ -191,7 +190,6 @@ public class UserController implements Initializable {
      */
     @FXML
     public void handleSearchPhotosButtonClick(ActionEvent event) {
-        System.out.println("Search Photos button clicked");
         // Switch to the Search view
         JavaFXUtils.switchView(event, "/views/Search.fxml");
     }
@@ -214,6 +212,14 @@ public class UserController implements Initializable {
      * @param album The album to update the information for.
      */
     private void updateAlbumInfo(Album album) {
+
+        if (album == null) {
+            // Set the album information to empty
+            selectedAlbumName.setText("");
+            selectedAlbumPhotoCount.setText("");
+            selectedAlbumDateRange.setText("");
+            return;
+        }
 
         // Implement the logic for updating the album information (name, photo count, and date range)
         selectedAlbumName.setText(album.getName());

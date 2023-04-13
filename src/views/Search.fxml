@@ -2,14 +2,15 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.TilePane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
@@ -35,17 +36,16 @@
             <Font name="Serif Regular" size="25.0" />
          </font>
       </Button>
-      <Pane fx:id="photoDisplayPane" layoutX="454.0" layoutY="69.0" prefHeight="223.0" prefWidth="335.0" style="-fx-background-color: #CCCCCC; -fx-border-color: #000000;">
+      <Pane layoutX="450.0" layoutY="69.0" prefHeight="225.0" prefWidth="335.0">
          <children>
-            <ImageView fx:id="photoDisplayImageView" fitHeight="225.0" fitWidth="335.0" layoutX="-1.0" layoutY="-1.0" pickOnBounds="true" preserveRatio="true" />
+            <ImageView fx:id="photoDisplayImageView" fitHeight="225.0" fitWidth="335.0" pickOnBounds="true" preserveRatio="true" />
          </children></Pane>
-      <ListView fx:id="photoCaptionListView" layoutX="454.0" layoutY="306.0" prefHeight="99.0" prefWidth="335.0" style="-fx-border-color: #000000; -fx-background-color: #CCCCCC; -fx-border-width: 2;" />
-      <Button fx:id="nextPhotoButton" layoutX="658.0" layoutY="428.0" mnemonicParsing="false" onAction="#handleNextPhotoButtonClick" prefHeight="36.0" prefWidth="72.0" style="-fx-border-color: #000000; -fx-border-width: 2;" text="Next">
+      <Button fx:id="nextPhotoButton" layoutX="674.0" layoutY="415.0" mnemonicParsing="false" onAction="#handleNextPhotoButtonClick" prefHeight="36.0" prefWidth="72.0" style="-fx-border-color: #000000; -fx-border-width: 2;" text="Next">
          <font>
             <Font name="Serif Bold" size="18.0" />
          </font>
       </Button>
-      <Button fx:id="prevPhotoButton" layoutX="516.0" layoutY="428.0" mnemonicParsing="false" onAction="#handlePrevPhotoButtonClick" prefHeight="36.0" prefWidth="72.0" style="-fx-border-color: #000000; -fx-border-width: 2;" text="Prev">
+      <Button fx:id="prevPhotoButton" layoutX="500.0" layoutY="415.0" mnemonicParsing="false" onAction="#handlePrevPhotoButtonClick" prefHeight="36.0" prefWidth="72.0" style="-fx-border-color: #000000; -fx-border-width: 2;" text="Prev">
          <font>
             <Font name="Serif Bold" size="18.0" />
          </font>
@@ -73,13 +73,13 @@
             </HBox>
             <HBox prefHeight="51.0" prefWidth="229.0">
                <children>
-                  <TextField fx:id="startDateField" prefHeight="30.0" prefWidth="100.0" promptText="Start date" style="-fx-border-color: #000000; -fx-background-color: #CCCCCC; -fx-border-width: 2;" />
-                  <Label alignment="CENTER" prefHeight="32.0" prefWidth="45.0" text="to">
+                  <DatePicker fx:id="startDatePicker" prefHeight="30.0" prefWidth="100.0" />
+                  <Label alignment="CENTER" prefHeight="30.0" prefWidth="30.0" text="to">
                      <font>
                         <Font name="Serif Bold" size="17.0" />
                      </font>
                   </Label>
-                  <TextField fx:id="endDateField" prefHeight="30.0" prefWidth="106.0" promptText="End date" style="-fx-border-color: #000000; -fx-background-color: #CCCCCC; -fx-border-width: 2;" />
+                  <DatePicker fx:id="endDatePicker" prefHeight="30.0" prefWidth="100.0" />
                </children>
             </HBox>
             <Button fx:id="dateSearchButton" mnemonicParsing="false" onAction="#handleDateSearchButtonClick" prefHeight="26.0" prefWidth="229.0" style="-fx-background-color: #81c784; -fx-border-color: #000000; -fx-border-width: 2;" text="Search">
@@ -93,31 +93,19 @@
                   <Font name="Serif Bold" size="21.0" />
                </font>
             </Label>
-            <HBox prefHeight="39.0" prefWidth="279.0">
+            <HBox prefHeight="40.0" prefWidth="280.0">
                <children>
                   <ChoiceBox fx:id="firstTagChoiceBox" prefHeight="26.0" prefWidth="116.0" />
-                  <Label alignment="CENTER" prefHeight="32.0" prefWidth="45.0" text="is">
-                     <font>
-                        <Font name="Serif Bold" size="17.0" />
-                     </font>
-                  </Label>
-                  <TextField fx:id="firstTagField" prefHeight="30.0" prefWidth="106.0" promptText="Tag Value" style="-fx-border-color: #000000; -fx-background-color: #CCCCCC; -fx-border-width: 2;" />
                </children>
             </HBox>
-            <Pane prefHeight="70.0" prefWidth="229.0">
+            <Pane prefHeight="40.0" prefWidth="280.0">
                <children>
-                  <ChoiceBox fx:id="andOrChoiceBox" layoutX="43.0" layoutY="19.0" prefWidth="150.0" />
+                  <ChoiceBox fx:id="andOrChoiceBox" prefHeight="26.0" prefWidth="59.0" />
                </children>
             </Pane>
-            <HBox prefHeight="54.0" prefWidth="229.0">
+            <HBox prefHeight="40.0" prefWidth="280.0">
                <children>
                   <ChoiceBox fx:id="secondTagChoiceBox" prefHeight="26.0" prefWidth="116.0" />
-                  <Label alignment="CENTER" prefHeight="32.0" prefWidth="45.0" text="is">
-                     <font>
-                        <Font name="Serif Bold" size="17.0" />
-                     </font>
-                  </Label>
-                  <TextField fx:id="secondTagField" prefHeight="30.0" prefWidth="106.0" promptText="Tag Value" style="-fx-border-color: #000000; -fx-background-color: #CCCCCC; -fx-border-width: 2;" />
                </children>
             </HBox>
             <Button fx:id="tagSearchButton" mnemonicParsing="false" onAction="#handleTagSearchButtonClick" prefHeight="24.0" prefWidth="229.0" style="-fx-background-color: #81c784; -fx-border-color: #000000; -fx-border-width: 2;" text="Search">
@@ -127,16 +115,18 @@
             </Button>
          </children>
       </VBox>
-      <Button fx:id="exportNewAlbumButton" layoutX="516.0" layoutY="479.0" mnemonicParsing="false" onAction="#handleExportNewAlbumButtonClick" prefHeight="32.0" prefWidth="215.0" style="-fx-background-color: #81c784; -fx-border-color: #000000; -fx-border-width: 2;" text="Export as New Album">
+      <Button fx:id="exportNewAlbumButton" layoutX="619.0" layoutY="503.0" mnemonicParsing="false" onAction="#handleExportNewAlbumButtonClick" prefHeight="32.0" prefWidth="170.0" style="-fx-background-color: #81c784; -fx-border-color: #000000; -fx-border-width: 2;" text="Export as New Album">
          <font>
             <Font name="Serif Bold" size="15.0" />
          </font>
       </Button>
-      <ImageView fitHeight="225.0" fitWidth="335.0" layoutX="562.0" layoutY="-175.0" pickOnBounds="true" preserveRatio="true" />
-      <ScrollPane fx:id="photoThumbScrollPane" hbarPolicy="NEVER" layoutX="266.0" layoutY="69.0" prefHeight="452.0" prefWidth="179.0">
-        <content>
-          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="200.0" />
-        </content>
-      </ScrollPane>
+      <ScrollPane fx:id="photoThumbScrollPane" hbarPolicy="NEVER" layoutX="260.0" layoutY="69.0" prefHeight="466.0" prefWidth="179.0" style="-fx-border-color: #000000; -fx-border-width: 2;">
+         <content>
+            <TilePane fx:id="thumbnailTilePane" prefHeight="200.0" prefWidth="170.0" />
+         </content></ScrollPane>
+      <ScrollPane hbarPolicy="NEVER" layoutX="450.0" layoutY="299.0" prefHeight="90.0" prefWidth="335.0" style="-fx-border-color: #000000; -fx-border-width: 2;">
+         <content>
+            <TextArea fx:id="photoDescriptionTextArea" editable="false" prefHeight="200.0" prefWidth="335.0" />
+         </content></ScrollPane>
    </children>
 </AnchorPane>

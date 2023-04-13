@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.HashSet;
 import java.util.Set;
 
+import javafx.util.Pair;
+
 /**
  * This class represents a user in the application. A user has a username and a list of albums.
  * @author Sree Kommalapati and Shreeti Patel
@@ -17,6 +19,7 @@ public class User implements Serializable {
     private String username;
     private List<Album> albums;
     private Set<Photo> photos;
+    private Set<Pair<String, String>> tagTypes;
 
     /**
      * Creates a new user with the given username.
@@ -26,6 +29,7 @@ public class User implements Serializable {
         this.username = username;
         this.albums = new ArrayList<Album>();
         this.photos = new HashSet<Photo>();
+        this.tagTypes = new HashSet<Pair<String, String>>();
     }
 
     /**
@@ -42,6 +46,14 @@ public class User implements Serializable {
      */
     public List<Album> getAlbums() {
         return albums;
+    }
+
+    /**
+     * Returns the set of tagTypes for the user.
+     * @return the set of Pair<String, String> tagTypes of the user
+     */
+    public Set<Pair<String, String>> getTagTypes() {
+        return tagTypes;
     }
 
     /**
@@ -94,6 +106,14 @@ public class User implements Serializable {
     }
 
     /**
+     * Returns the set of photos of the user.
+     * @return the set of photos of the user
+     */
+    public Set<Photo> getPhotos() {
+        return photos;
+    }
+
+    /**
      * Updates the set of photos of the user.
      */
     public void updatePhotoSet() {
@@ -111,5 +131,12 @@ public class User implements Serializable {
      */
     public void addPhoto(Photo photo) {
         photos.add(photo);
+    }
+
+    /**
+     * Adds the given tag to the set of tag types of the user if it does not already exist.
+     */
+    public void addTag(String tagType, String tagValue) {
+        tagTypes.add(new Pair<String, String>(tagType, tagValue));
     }
 }

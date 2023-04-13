@@ -10,11 +10,24 @@ import java.io.File;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Date;
+import java.util.stream.Collectors;
+
+import java.time.LocalDate;
+import java.time.ZoneId;
+
+import javafx.scene.layout.TilePane;
 
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.ComboBox;
+
 import javafx.scene.image.ImageView;
 import javafx.scene.image.Image;
+
+import javafx.util.Pair;
 
 import utils.JavaFXUtils;
 
@@ -24,22 +37,29 @@ import utils.JavaFXUtils;
  */
 public class DataManager {
 
+    private static final int THUMBNAIL_WIDTH = 80;
+    private static final int THUMBNAIL_HEIGHT = 80;
+
     public static DataManager instance;
 
     private User loggedInUser;
     private Album openedAlbum;
     private int selectedPhotoIndex;
 
-    private ArrayList<User> users;
+    private List<User> users;
+    private List<Photo> searchResults;
 
     /**
      * Create a new DataManager object.
      */
     private DataManager() {
         users = new ArrayList<User>();
+        searchResults = new ArrayList<Photo>();
+
         loggedInUser = null;
         openedAlbum = null;
-        selectedPhotoIndex = -1;
+
+        selectedPhotoIndex = 0;
         readUsers();
     }
 
@@ -212,6 +232,14 @@ public class DataManager {
     }
 
     /**
+     * Returns the set of photos for the user that is currently logged in.
+     * @return The set of photos for the user that is currently logged in.
+     */
+    public List<Photo> getAllPhotos() {
+        return new ArrayList<Photo>(loggedInUser.getPhotos());
+    }
+
+    /**
      * Updates the given ListView with all the albums for the user that is currently logged in.
      * @param listView The ListView to update.
      */
@@ -274,6 +302,26 @@ public class DataManager {
     }
 
     /**
+     * Checks if the album that is currently opened has a photo with the given pathname.
+     */
+    public boolean hasPhoto(String pathname) {
+        for (Photo photo : openedAlbum.getPhotos()) {
+            if (photo.getPath().equals(pathname)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Sets the caption of the currently selected photo.
+     */
+    public void setCaption(String caption) {
+        openedAlbum.getPhotos().get(selectedPhotoIndex).setCaption(caption);
+        writeUsers();
+    }
+
+    /**
      * Add the given photo to the currently selected album.
      * @param photo The photo to add.
      */
@@ -298,9 +346,15 @@ public class DataManager {
      * Remove the given photo from the currently selected album.
      * @param photo The photo to remove.
      */
-    public void removePhotoFromOpenedAlbum(Photo photo) {
+    public void removeSelectedPhoto() {
         // Remove the photo from the album.
-        openedAlbum.removePhoto(photo);
+        openedAlbum.removePhoto(openedAlbum.getPhotos().get(selectedPhotoIndex));
+        // Update the user's photo set
+        loggedInUser.updatePhotoSet();
+        // Update the selected photo index.
+        selectedPhotoIndex = Math.min(selectedPhotoIndex, openedAlbum.getPhotos().size() - 1);
+        // Display the selected photo.
+        // Write the users to the database.
         writeUsers();
     }
 
@@ -308,44 +362,229 @@ public class DataManager {
      * Display the selcted photo in the given ImageView.
      * @param imageView The ImageView to display the photo in.
      */
-    public void displaySelectedPhotoOn(ImageView imageView) {
-        if (selectedPhotoIndex == -1) {
-            try {
-                FileInputStream inputStream = new FileInputStream("./stock/Shibukawa_Kiyohiko_Meme.jpg");
-                Image noImageInAlbumStockImage = new Image(inputStream);
-                imageView.setImage(noImageInAlbumStockImage);
-                inputStream.close();
-            } catch (FileNotFoundException e) {
-                // Handle the exception if the image file is not found
-                JavaFXUtils.showAlert(AlertType.ERROR, "Error", "Stock image not found.", "Fix needed :/");
-            } catch (IOException e) {
-                // Handle the exception if there's an error closing the FileInputStream
-                JavaFXUtils.showAlert(AlertType.ERROR, "Error", "Error closing FileInputStream.", "Fix needed :/");
+    public void displaySelectedPhotoOn(ImageView imageView, TextArea textArea) {
+        if (openedAlbum == null) {
+            // Display a stock photo if the album is empty.
+            if (searchResults.size() == 0) {
+                try {
+                    FileInputStream inputStream = new FileInputStream("./stock/NO.gif");
+                    Image noImageInAlbumStockImage = new Image(inputStream);
+                    imageView.setImage(noImageInAlbumStockImage);
+                    inputStream.close();
+                } catch (FileNotFoundException e) {
+                    // Handle the exception if the image file is not found
+                    JavaFXUtils.showAlert(AlertType.ERROR, "Error", "Stock image not found.", "Fix needed :/");
+                } catch (IOException e) {
+                    // Handle the exception if there's an error closing the FileInputStream
+                    JavaFXUtils.showAlert(AlertType.ERROR, "Error", "Error closing FileInputStream.", "Fix needed :/");
+                }
+                return;
             }
-            return;
+            Photo selectedPhoto = searchResults.get(selectedPhotoIndex);
+            selectedPhoto.displayOn(imageView);
+            textArea.setText(selectedPhoto.getDescription());
+        } else {
+            // Display a stock photo if the album is empty.
+            if (openedAlbum.getPhotos().size() == 0) {
+                try {
+                    FileInputStream inputStream = new FileInputStream("./stock/NO.gif");
+                    Image noImageInAlbumStockImage = new Image(inputStream);
+                    imageView.setImage(noImageInAlbumStockImage);
+                    inputStream.close();
+                } catch (FileNotFoundException e) {
+                    // Handle the exception if the image file is not found
+                    JavaFXUtils.showAlert(AlertType.ERROR, "Error", "Stock image not found.", "Fix needed :/");
+                } catch (IOException e) {
+                    // Handle the exception if there's an error closing the FileInputStream
+                    JavaFXUtils.showAlert(AlertType.ERROR, "Error", "Error closing FileInputStream.", "Fix needed :/");
+                }
+                return;
+            }
+            Photo selectedPhoto = openedAlbum.getPhotoAtIndex(selectedPhotoIndex);
+            selectedPhoto.displayOn(imageView);
+            textArea.setText(selectedPhoto.getDescription());
         }
-        Photo selectedPhoto = openedAlbum.getPhotoAtIndex(selectedPhotoIndex);
-        selectedPhoto.displayOn(imageView);
+        
     }
 
     /**
      * Move to the next photo in the currently opened album.
      */
     public void nextPhoto() {
-        selectedPhotoIndex = (selectedPhotoIndex + 1) % openedAlbum.getPhotos().size();
+        if (openedAlbum == null) {
+            selectedPhotoIndex = (selectedPhotoIndex + 1) % searchResults.size();
+        } else {
+            selectedPhotoIndex = (selectedPhotoIndex + 1) % openedAlbum.getPhotos().size();
+        }
     }
 
     /**
      * Move to the previous photo in the currently opened album.
      */
     public void previousPhoto() {
-        selectedPhotoIndex = (selectedPhotoIndex - 1 + openedAlbum.getPhotos().size()) % openedAlbum.getPhotos().size();
+        if (openedAlbum == null) {
+            selectedPhotoIndex = (selectedPhotoIndex - 1 + searchResults.size()) % searchResults.size();
+        } else {
+            selectedPhotoIndex = (selectedPhotoIndex - 1 + openedAlbum.getPhotos().size()) % openedAlbum.getPhotos().size();
+        }
+        
     }
+
+    /**
+     * Gets the currently selected photo index.
+     */
+    public int getSelectedPhotoIndex() {
+        return selectedPhotoIndex;
+    }
+
+    /**
+     * Displays the thumbnails of the photos in the album.
+     */
+    public void displayThumbnailsOn(TilePane thumbnailTilePane) {
+        thumbnailTilePane.getChildren().clear(); // Clear the existing children
+        if (openedAlbum == null) {
+            for (Photo photo : searchResults) {
+                Image image = new Image(photo.getPath(), THUMBNAIL_WIDTH, THUMBNAIL_HEIGHT, true, true);
+                ImageView thumbnail = new ImageView(image);
+                thumbnail.setPreserveRatio(true);
+                thumbnail.setFitWidth(THUMBNAIL_WIDTH);
+                thumbnail.setFitHeight(THUMBNAIL_HEIGHT);
+                thumbnail.setUserData(photo);
+                thumbnailTilePane.getChildren().add(thumbnail);
+            }
+        } else {
+            for (Photo photo : openedAlbum.getPhotos()) {
+                Image image = new Image(photo.getPath(), THUMBNAIL_WIDTH, THUMBNAIL_HEIGHT, true, true);
+                ImageView thumbnail = new ImageView(image);
+                thumbnail.setPreserveRatio(true);
+                thumbnail.setFitWidth(THUMBNAIL_WIDTH);
+                thumbnail.setFitHeight(THUMBNAIL_HEIGHT);
+                thumbnail.setUserData(photo);
+                thumbnailTilePane.getChildren().add(thumbnail);
+            }
+        }
+    }
+
+    /**
+     * Add a tag to the currently selected photo using the given key and value.
+     * @param key The key of the tag.
+     * @param value The value of the tag.
+     */
+    public void addTagToSelectedPhoto(String key, String value) {
+        if (openedAlbum == null) {
+            // Prevent the user from adding a tag to a photo that is not in an album.
+            JavaFXUtils.showAlert(AlertType.ERROR, "Error", "Cannot add tag to photo not in an album.", "Fix needed :/");
+        } else {
+            // Add the tag to the photo and user.
+            openedAlbum.getPhotoAtIndex(selectedPhotoIndex).addTag(key, value);
+            loggedInUser.addTag(key, value);
+             // Write the users to the database.
+            writeUsers();
+        }
+       
+    }
+
+    /**
+     * Display the choices of unopened albums on the given ChoiceBox.
+     * @param listView The ChoiceBox to display the unopened albums on.
+     */
+    public void displayUnopenedAlbumsOn(ChoiceBox<String> choiceBox) {
+        // Clear the existing items in the ChoiceBox
+        choiceBox.getItems().clear();
+    
+        // Loop through the albums of the current user
+        for (Album album : getCurrentUserAlbums()) {
+            // Check if the album is not currently opened
+            if (!album.equals(openedAlbum)) {
+                // Add the unopened album to the ChoiceBox items
+                choiceBox.getItems().add(album.getName());
+            }
+        }
+    
+        // If there are any unopened albums, select the first one by default
+        if (!choiceBox.getItems().isEmpty()) {
+            choiceBox.getSelectionModel().select(0);
+        }
+    }
+
+    /**
+     * Display the deletable choices of tags on the given ChoiceBox.
+     * @param choiceBox The ChoiceBox to display the tags on.
+     */
+    public void displayDeletableTagsOn(ChoiceBox<String> choiceBox) {
+        // Clear the existing items in the ChoiceBox
+        choiceBox.getItems().clear();
+    
+        // Loop through the tags of the current user
+        for (Pair<String, String> tag : loggedInUser.getTagTypes()) {
+            // Add the tag to the ChoiceBox items
+            choiceBox.getItems().add(tag.getKey() + ": " + tag.getValue());
+        }
+
+        // If there are any tags, select the first one by default
+        if (!choiceBox.getItems().isEmpty()) {
+            choiceBox.getSelectionModel().select(0);
+        }
+    }
+
+    /**
+     * Display the creatable choices of tags on the given key and value ComboBoxes.
+     * @param keyBox The ComboBox to display the keys on.
+     * @param valueBox The ComboBox to display the valyes on.
+     */
+    public void displayCreatableTagsOn(ComboBox<String> keyBox, ComboBox<String> valueBox) {
+        // Clear the existing items in the ComboBoxes
+        keyBox.getItems().clear();
+        valueBox.getItems().clear();
+    
+        // Loop through the tags of the current user
+        for (Pair<String, String> tag : loggedInUser.getTagTypes()) {
+            // Add the tag to the ComboBox items
+            keyBox.getItems().add(tag.getKey());
+            valueBox.getItems().add(tag.getValue());
+        }
+
+        // If there are any tags, select the first one by default
+        if (!keyBox.getItems().isEmpty()) {
+            keyBox.getSelectionModel().select(0);
+            valueBox.getSelectionModel().select(0);
+        }
+    }
+
 
     /**
      * Closes the currently opened album.
      */
     public void closeAlbum() {
+        selectedPhotoIndex = 0;
+        writeUsers();
         openedAlbum = null;
     }
+
+    /**
+     * Prepares the search results.
+     */
+    public void prepareSearchResults() {
+        searchResults.clear();
+        searchResults.addAll(loggedInUser.getPhotos());
+    }
+
+    /**
+     * Filter the search results by the date range
+     */
+    public void filterSearchResultsByDateRange(LocalDate startDate, LocalDate endDate) {
+
+        prepareSearchResults();
+
+        Date start = startDate != null ? Date.from(startDate.atStartOfDay(ZoneId.systemDefault()).toInstant()) : null;
+        Date end = endDate != null ? Date.from(endDate.atStartOfDay(ZoneId.systemDefault()).toInstant()) : null;
+
+        searchResults = searchResults.stream()
+            .filter(photo -> {
+                Date photoDate = Date.from(photo.getDate().atZone(ZoneId.systemDefault()).toInstant());
+                return (start == null || !photoDate.before(start)) && (end == null || !photoDate.after(end));
+            }).collect(Collectors.toList());
+    }
+
+
 }
