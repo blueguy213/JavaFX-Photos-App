@@ -58,6 +58,10 @@ public class Photo implements Serializable {
         return dateTime;
     }
 
+    public Tags getTags() {
+        return tags;
+    }
+
     /**
      * Sets the caption of the photo.
      * @param caption the caption of the photo

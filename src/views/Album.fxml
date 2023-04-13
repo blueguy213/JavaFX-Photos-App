@@ -32,7 +32,7 @@
             <Font name="Serif Regular" size="25.0" />
          </font>
       </Button>
-      <Button fx:id="viewAlbumButton" layoutY="550.0" mnemonicParsing="false" onAction="#handleViewAlbumButtonClick" prefHeight="50.0" prefWidth="300.0" style="-fx-background-color: #ffecb3; -fx-border-color: #000000; -fx-border-width: 3;" text="View Albums">
+      <Button fx:id="viewAlbumsButton" layoutY="550.0" mnemonicParsing="false" onAction="#handleViewAlbumsButtonClick" prefHeight="50.0" prefWidth="300.0" style="-fx-background-color: #ffecb3; -fx-border-color: #000000; -fx-border-width: 3;" text="View Albums">
          <font>
             <Font name="Serif Regular" size="25.0" />
          </font>

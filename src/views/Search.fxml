@@ -6,6 +6,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
@@ -40,12 +41,12 @@
          <children>
             <ImageView fx:id="photoDisplayImageView" fitHeight="225.0" fitWidth="335.0" pickOnBounds="true" preserveRatio="true" />
          </children></Pane>
-      <Button fx:id="nextPhotoButton" layoutX="674.0" layoutY="415.0" mnemonicParsing="false" onAction="#handleNextPhotoButtonClick" prefHeight="36.0" prefWidth="72.0" style="-fx-border-color: #000000; -fx-border-width: 2;" text="Next">
+      <Button fx:id="nextPhotoButton" layoutX="674.0" layoutY="409.0" mnemonicParsing="false" onAction="#handleNextPhotoButtonClick" prefHeight="36.0" prefWidth="72.0" style="-fx-border-color: #000000; -fx-border-width: 2;" text="Next">
          <font>
             <Font name="Serif Bold" size="18.0" />
          </font>
       </Button>
-      <Button fx:id="prevPhotoButton" layoutX="500.0" layoutY="415.0" mnemonicParsing="false" onAction="#handlePrevPhotoButtonClick" prefHeight="36.0" prefWidth="72.0" style="-fx-border-color: #000000; -fx-border-width: 2;" text="Prev">
+      <Button fx:id="prevPhotoButton" layoutX="500.0" layoutY="409.0" mnemonicParsing="false" onAction="#handlePrevPhotoButtonClick" prefHeight="36.0" prefWidth="72.0" style="-fx-border-color: #000000; -fx-border-width: 2;" text="Prev">
          <font>
             <Font name="Serif Bold" size="18.0" />
          </font>
@@ -115,7 +116,8 @@
             </Button>
          </children>
       </VBox>
-      <Button fx:id="exportNewAlbumButton" layoutX="619.0" layoutY="503.0" mnemonicParsing="false" onAction="#handleExportNewAlbumButtonClick" prefHeight="32.0" prefWidth="170.0" style="-fx-background-color: #81c784; -fx-border-color: #000000; -fx-border-width: 2;" text="Export as New Album">
+      <TextField fx:id="exportDestinationTextField" layoutX="450.0" layoutY="455.0" prefHeight="32.0" prefWidth="251.0" />
+      <Button fx:id="exportNewAlbumButton" layoutX="450.0" layoutY="500.0" mnemonicParsing="false" onAction="#handleExportNewAlbumButtonClick" prefHeight="32.0" prefWidth="170.0" style="-fx-background-color: #81c784; -fx-border-color: #000000; -fx-border-width: 2;" text="Export as New Album">
          <font>
             <Font name="Serif Bold" size="15.0" />
          </font>
@@ -126,7 +128,7 @@
          </content></ScrollPane>
       <ScrollPane hbarPolicy="NEVER" layoutX="450.0" layoutY="299.0" prefHeight="90.0" prefWidth="335.0" style="-fx-border-color: #000000; -fx-border-width: 2;">
          <content>
-            <TextArea fx:id="photoDescriptionTextArea" editable="false" prefHeight="200.0" prefWidth="335.0" />
+            <TextArea fx:id="photoDescriptionTextArea" editable="false" prefHeight="84.0" prefWidth="335.0" />
          </content></ScrollPane>
    </children>
 </AnchorPane>

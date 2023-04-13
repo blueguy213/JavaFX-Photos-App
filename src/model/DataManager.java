@@ -287,11 +287,7 @@ public class DataManager {
      */
     public void openAlbum(Album album) {
         openedAlbum = album;
-        if (openedAlbum.getPhotos().size() > 0) {
-            selectedPhotoIndex = 0;
-        } else {
-            selectedPhotoIndex = -1;
-        }
+        selectedPhotoIndex = 0;
     }
 
     /**
@@ -466,6 +462,30 @@ public class DataManager {
     }
 
     /**
+     * Display the creatable choices of tags on the given key and value ComboBoxes.
+     * @param keyBox The ComboBox to display the keys on.
+     * @param valueBox The ComboBox to display the valyes on.
+     */
+    public void displayCreatableTagsOn(ComboBox<String> keyBox, ComboBox<String> valueBox) {
+        // Clear the existing items in the ComboBoxes
+        keyBox.getItems().clear();
+        valueBox.getItems().clear();
+    
+        // Loop through the tags of the current user
+        for (Pair<String, String> tag : loggedInUser.getTagTypes()) {
+            // Add the tag to the ComboBox items
+            keyBox.getItems().add(tag.getKey());
+            valueBox.getItems().add(tag.getValue());
+        }
+
+        // If there are any tags, select the first one by default
+        if (!keyBox.getItems().isEmpty()) {
+            keyBox.getSelectionModel().select(0);
+            valueBox.getSelectionModel().select(0);
+        }
+    }
+
+    /**
      * Add a tag to the currently selected photo using the given key and value.
      * @param key The key of the tag.
      * @param value The value of the tag.
@@ -478,6 +498,8 @@ public class DataManager {
             // Add the tag to the photo and user.
             openedAlbum.getPhotoAtIndex(selectedPhotoIndex).addTag(key, value);
             loggedInUser.addTag(key, value);
+            // Update the user's tags.
+            loggedInUser.updateTagTypes();
              // Write the users to the database.
             writeUsers();
         }
@@ -512,11 +534,16 @@ public class DataManager {
      * @param choiceBox The ChoiceBox to display the tags on.
      */
     public void displayDeletableTagsOn(ChoiceBox<String> choiceBox) {
+
+        // Return without adding choices if there are no photos in the album.
+        if (openedAlbum.getPhotos().isEmpty()) {
+            return;
+        }
         // Clear the existing items in the ChoiceBox
         choiceBox.getItems().clear();
-    
+        
         // Loop through the tags of the current user
-        for (Pair<String, String> tag : loggedInUser.getTagTypes()) {
+        for (Pair<String, String> tag : openedAlbum.getPhotoAtIndex(selectedPhotoIndex).getTags().getPairs()) {
             // Add the tag to the ChoiceBox items
             choiceBox.getItems().add(tag.getKey() + ": " + tag.getValue());
         }
@@ -528,29 +555,59 @@ public class DataManager {
     }
 
     /**
-     * Display the creatable choices of tags on the given key and value ComboBoxes.
-     * @param keyBox The ComboBox to display the keys on.
-     * @param valueBox The ComboBox to display the valyes on.
+     * Delete the tag specificied by the given String in the format "key-value" from the currently selected photo.
+     * @param tag The tag to delete in the format "key-value".
      */
-    public void displayCreatableTagsOn(ComboBox<String> keyBox, ComboBox<String> valueBox) {
-        // Clear the existing items in the ComboBoxes
-        keyBox.getItems().clear();
-        valueBox.getItems().clear();
-    
-        // Loop through the tags of the current user
-        for (Pair<String, String> tag : loggedInUser.getTagTypes()) {
-            // Add the tag to the ComboBox items
-            keyBox.getItems().add(tag.getKey());
-            valueBox.getItems().add(tag.getValue());
-        }
-
-        // If there are any tags, select the first one by default
-        if (!keyBox.getItems().isEmpty()) {
-            keyBox.getSelectionModel().select(0);
-            valueBox.getSelectionModel().select(0);
+    public void deleteTagFromSelectedPhoto(String tag) {
+        if (openedAlbum == null) {
+            // Prevent the user from deleting a tag from a photo that is not in an album.
+            JavaFXUtils.showAlert(AlertType.ERROR, "Error", "Cannot delete tag from photo not in an album.", "Open an album first");
+        } else {
+            if (tag == null || tag.isEmpty()) {
+                // Prevent the user from deleting a tag from a photo that is not in an album.
+                JavaFXUtils.showAlert(AlertType.ERROR, "Error", "Cannot delete an empty tag.", "Pick a tag");
+                return;
+            }
+            // Split the tag into its key and value.
+            String[] tagParts = tag.split(": ");
+            System.out.println(tagParts[0] + " " + tagParts[1]);
+            // Delete the tag from the photo.
+            openedAlbum.getPhotoAtIndex(selectedPhotoIndex).removeTag(tagParts[0], tagParts[1]);
+            // Update the user's tags.
+            loggedInUser.updateTagTypes();
+            // Write the users to the database.
+            writeUsers();
         }
     }
 
+    /**
+     * Copy the currently selected photo to the given album.
+     * @param albumName The name of the album to copy the photo to.
+     * @return The index of the photo in the album. -1 if the photo was not copied.
+     */
+    public int copySelectedPhotoToAlbum(String albumName) {
+        if (openedAlbum == null) {
+            // Prevent the user from copying a photo that is not in an album.
+            JavaFXUtils.showAlert(AlertType.ERROR, "Error", "Cannot copy photo not in an album.", "Open an album");
+            return -1;
+        } else {
+            // Check if the photo is already in the album.
+            if (loggedInUser.getAlbumByName(albumName).hasPhoto(openedAlbum.getPhotoAtIndex(selectedPhotoIndex).getPath())) {
+                // Prevent the user from copying a photo that is already in the album.
+                JavaFXUtils.showAlert(AlertType.ERROR, "Error", "Cannot copy photo already in album.", "Rename photo");
+                return -1;
+            }
+
+            // Get the album to copy the photo to.
+            Album album = loggedInUser.getAlbumByName(albumName);
+            // Copy the photo to the album.
+            album.addPhoto(openedAlbum.getPhotoAtIndex(selectedPhotoIndex));
+            // Write the users to the database.
+            writeUsers();
+            // Return the index of the photo in the album.
+            return album.getPhotos().indexOf(openedAlbum.getPhotoAtIndex(selectedPhotoIndex));
+        }
+    }
 
     /**
      * Closes the currently opened album.
@@ -586,5 +643,93 @@ public class DataManager {
             }).collect(Collectors.toList());
     }
 
+    /**
+     * Display the all tagTypes on the given ChoiceBox.
+     * @param choiceBox The ChoiceBox to display the tagTypes on.
+     */
+    public void displayAllTagTypesOn(ChoiceBox<String> choiceBox) {
 
+        // Clear the existing items in the ChoiceBox
+        choiceBox.getItems().clear();
+
+        // Loop through the tagTypes of the current user
+        for (Pair<String, String> tagType : loggedInUser.getTagTypes()) {
+            // Add the tagType to the ChoiceBox items
+            choiceBox.getItems().add(tagType.getKey() + ": " + tagType.getValue());
+        }
+    }
+
+    /**
+     * Filter the search results by the single give tag
+     * @param key The key of the tag.
+     * @param value The value of the tag.
+     */
+    public void filterSearchResultsByOneTag(String key, String value) {
+
+        prepareSearchResults();
+
+        searchResults = searchResults.stream()
+            .filter(photo -> photo.getTags().getPairs().stream()
+                .anyMatch(tag -> tag.getKey().equals(key) && tag.getValue().equals(value)))
+            .collect(Collectors.toList());
+    }
+
+
+    /**
+     * Filter the search results by the two given tags (AND)
+     * @param key1 The key of the first tag.
+     * @param value1 The value of the first tag.
+     * @param key2 The key of the second tag.
+     * @param value2 The value of the second tag.
+     */
+    public void filterSearchResultsByTwoTagsAnd(String key1, String value1, String key2, String value2) {
+
+        prepareSearchResults();
+
+        searchResults = searchResults.stream()
+            .filter(photo -> photo.getTags().getPairs().stream()
+                .anyMatch(tag -> tag.getKey().equals(key1) && tag.getValue().equals(value1)))
+            .filter(photo -> photo.getTags().getPairs().stream()
+                .anyMatch(tag -> tag.getKey().equals(key2) && tag.getValue().equals(value2)))
+            .collect(Collectors.toList());
+    }
+
+    /**
+     * Filter the search results by the two given tags (OR)
+     * @param key1 The key of the first tag.
+     * @param value1 The value of the first tag.
+     * @param key2 The key of the second tag.
+     * @param value2 The value of the second tag.
+     */
+    public void filterSearchResultsByTwoTagsOr(String key1, String value1, String key2, String value2) {
+
+        prepareSearchResults();
+
+        searchResults = searchResults.stream()
+            .filter(photo -> photo.getTags().getPairs().stream()
+                .anyMatch(tag -> tag.getKey().equals(key1) && tag.getValue().equals(value1)))
+            .collect(Collectors.toList());
+
+        searchResults.addAll(loggedInUser.getPhotos().stream()
+            .filter(photo -> photo.getTags().getPairs().stream()
+                .anyMatch(tag -> tag.getKey().equals(key2) && tag.getValue().equals(value2)))
+            .collect(Collectors.toList()));
+    }
+
+    /**
+     * Export the search results to a new album with the given name.
+     */
+    public void exportSearchResultsToAlbum(String albumName) {
+        // Create a new album with the given name.
+        Album album = new Album(albumName);
+        // Add each of the search results to the album.
+        for (Photo photo : searchResults) {
+            album.addPhoto(photo);
+        }
+        // Add the album to the user.
+        loggedInUser.addAlbum(album);
+        // Write the users to the database.
+        writeUsers();
+    }
+    
 }

@@ -126,6 +126,18 @@ public class User implements Serializable {
     }
 
     /**
+     * Updates the set of tag types of the user.
+     */
+    public void updateTagTypes() {
+        tagTypes.clear();
+        for (Photo photo : photos) {
+            for (Pair<String, String> tag : photo.getTags().getPairs()) {
+                tagTypes.add(tag);
+            }
+        }
+    }
+
+    /**
      * Adds the given photo to the set of photos of the user if it does not already exist.
      * @param photo the photo to add
      */

@@ -180,7 +180,7 @@ public class AlbumController implements Initializable{
      * The button for updating the caption of the photo.
      */
     @FXML
-    private Button viewAlbumButton;
+    private Button viewAlbumsButton;
 
     /**
      * The TilePane for displaying the photo thumbnails.
@@ -267,7 +267,8 @@ public class AlbumController implements Initializable{
      */
     @FXML
     void handleCopyPhotoButtonClick(ActionEvent event) {
-
+        String destinationAlbumName = destinationAlbumChoiceBox.getValue();
+        dataManager.copySelectedPhotoToAlbum(destinationAlbumName);
     }
 
     /**
@@ -275,7 +276,15 @@ public class AlbumController implements Initializable{
      */
     @FXML
     void handleDeleteTagButtonClick(ActionEvent event) {
+        // Get the key and value from the choice boxes.
+        String tag = selectTagToDeleteChoiceBox.getValue();
 
+
+        // Delete the tag from the photo.
+        dataManager.deleteTagFromSelectedPhoto(tag);
+
+
+        updateDisplay();
     }
 
     @FXML
@@ -287,7 +296,11 @@ public class AlbumController implements Initializable{
 
     @FXML
     void handleMovePhotoButtonClick(ActionEvent event) {
-
+        String destinationAlbumName = destinationAlbumChoiceBox.getValue();
+        if (dataManager.copySelectedPhotoToAlbum(destinationAlbumName) > -1) {
+            dataManager.removeSelectedPhoto();
+        }
+        updateDisplay();
     }
 
     @FXML
@@ -322,7 +335,7 @@ public class AlbumController implements Initializable{
     }
 
     @FXML
-    void handleViewAlbumButtonClick(ActionEvent event) {
+    void handleViewAlbumsButtonClick(ActionEvent event) {
         JavaFXUtils.switchView(event, "/views/User.fxml");
     }
 

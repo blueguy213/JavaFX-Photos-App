@@ -41,15 +41,11 @@ public class Tags implements Serializable {
     }
 
     /**
-     * Returns a list of tag strings.
-     * @return the list of formatted (key, value) string pairs for displays
+     * Returns a list of key, value Pairs.
+     * @return the list of (key, value) string pairs for searching
      */
-    public List<String> getTags() {
-        List<String> result = new ArrayList<String>();
-        for (Pair<String, String> tag : tags) {
-            result.add(tag.getKey() + ": " + tag.getValue());
-        }
-        return result;
+    public List<Pair<String, String>> getPairs() {
+        return new ArrayList<Pair<String, String>>(tags);
     }
 
 
