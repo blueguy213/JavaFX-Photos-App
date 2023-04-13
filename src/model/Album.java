@@ -91,12 +91,21 @@ public class Album implements Serializable {
     public void removePhoto(Photo photo) {
         this.photos.remove(photo);
     }
+
+    /**
+     * Checks if the album contains the photo with the given pathname.
+     * @param path the pathname of the photo
+     * @return true if the album contains the photo with the given pathname, false otherwise
+     */
+    public boolean hasPhoto(String path) {
+        return getPhotoByPath(path) != null; 
+    }
     
     /**
      * Returns the photo with the given path.
      * 
      * @param path the path of the photo
-     * @return the photo with the given path
+     * @return the photo with the given path or null if no photo with the given path exists
      */
     public Photo getPhotoByPath(String path) {
         for (Photo photo : photos) {

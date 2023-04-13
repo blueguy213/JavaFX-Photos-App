@@ -3,6 +3,8 @@ package model;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * This class represents a user in the application. A user has a username and a list of albums.
@@ -14,7 +16,7 @@ public class User implements Serializable {
 
     private String username;
     private List<Album> albums;
-    private List<Photo> photos;
+    private Set<Photo> photos;
 
     /**
      * Creates a new user with the given username.
@@ -22,7 +24,8 @@ public class User implements Serializable {
      */
     public User(String username) {
         this.username = username;
-        this.albums = new ArrayList<>();
+        this.albums = new ArrayList<Album>();
+        this.photos = new HashSet<Photo>();
     }
 
     /**
@@ -34,27 +37,11 @@ public class User implements Serializable {
     }
 
     /**
-     * Sets the username of the user.
-     * @param username the username of the user
-     */
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    /**
      * Returns the list of albums of the user.
      * @return the list of albums of the user
      */
     public List<Album> getAlbums() {
         return albums;
-    }
-
-    /**
-     * Sets the list of albums of the user.
-     * @param albums the list of albums of the user
-     */
-    public void setAlbums(List<Album> albums) {
-        this.albums = albums;
     }
 
     /**
@@ -66,19 +53,16 @@ public class User implements Serializable {
     }
 
     /**
-     * Adds the given photo to the list of photos of the user.
-     * @param photo the photo to add
-     */
-    public void addPhoto(Photo photo) {
-        this.photos.add(photo);
-    }
-
-    /**
      * Removes the given album from the list of albums of the user.
      * @param album the album to remove
      */
     public void removeAlbum(Album album) {
         this.albums.remove(album);
+        for (Photo photo : album.getPhotos()) {
+            if (photos.contains(photo)) {
+                photos.remove(photo);
+            }
+        }
     }
 
     /**
@@ -100,13 +84,32 @@ public class User implements Serializable {
      * @param name the name of the album
      * @return true if the user already has an album with the given name
      */
-    public boolean hasDuplicateAlbumName(String name) {
-        int count = 0;
+    public boolean hasAlbum(String name) {
         for (Album album : albums) {
             if (album.getName().equals(name)) {
-                count++;
+                return true;
             }
         }
-        return count > 1;
+        return false;
+    }
+
+    /**
+     * Updates the set of photos of the user.
+     */
+    public void updatePhotoSet() {
+        photos.clear();
+        for (Album album : albums) {
+            for (Photo photo : album.getPhotos()) {
+                photos.add(photo);
+            }
+        }
+    }
+
+    /**
+     * Adds the given photo to the set of photos of the user if it does not already exist.
+     * @param photo the photo to add
+     */
+    public void addPhoto(Photo photo) {
+        photos.add(photo);
     }
 }

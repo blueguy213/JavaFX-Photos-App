@@ -108,7 +108,7 @@ public class UserController implements Initializable {
             return;
         }
         // Check if the new name is already in use
-        if (dataManager.isAlbumNameTaken(newName)) {
+        if (dataManager.hasAlbum(newName)) {
             // Show an error dialog or message indicating the album name is already in use
             JavaFXUtils.showAlert(AlertType.ERROR, "Error", "Invalid Album Name", "The album name you entered is already in use.");
             return;
@@ -156,7 +156,7 @@ public class UserController implements Initializable {
             return;
         }
         // Check if the name is already in use
-        if (dataManager.isAlbumNameTaken(name)) {
+        if (dataManager.hasAlbum(name)) {
             // Show an error dialog or message indicating the album name is already in use
             JavaFXUtils.showAlert(AlertType.ERROR, "Error", "Invalid Album Name", "The album name you entered is already in use.");
             return;

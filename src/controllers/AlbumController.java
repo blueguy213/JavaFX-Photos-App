@@ -228,6 +228,8 @@ public class AlbumController implements Initializable{
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         dataManager = DataManager.getInstance();
+        albumNameLable.setText(dataManager.getOpenedAlbumName());
+        
     }
 
 }

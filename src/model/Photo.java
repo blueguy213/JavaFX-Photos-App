@@ -4,19 +4,11 @@ import java.io.Serializable;
 
 import java.time.LocalDateTime;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.stream.Collectors;
-
 import utils.ImageUtils;
 
 
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.util.Pair;
 
 /**
  * This class represents a photo in the application. A photo has a path, caption, date and time, and a dictionary of tags.

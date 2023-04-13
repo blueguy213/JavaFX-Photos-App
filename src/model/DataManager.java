@@ -13,6 +13,7 @@ import java.util.List;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ListView;
 import javafx.scene.image.ImageView;
+import javafx.scene.image.Image;
 
 import utils.JavaFXUtils;
 
@@ -35,6 +36,9 @@ public class DataManager {
      */
     private DataManager() {
         users = new ArrayList<User>();
+        loggedInUser = null;
+        openedAlbum = null;
+        selectedPhotoIndex = -1;
         readUsers();
     }
 
@@ -93,7 +97,7 @@ public class DataManager {
             }
             ois.close();
         } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
+            JavaFXUtils.showAlert(AlertType.ERROR, "Error", "Invalid File", "IOException | ClassNotFoundException");
         }
     }
 
@@ -101,7 +105,6 @@ public class DataManager {
      * Writes the users to the db/users file.
      * @param users The ArrayList containing the users to write.
      * 
-     * @throws IOException If the file cannot be written to.
      * 
      * @see java.io.ObjectOutputStream
      * @see java.io.FileOutputStream
@@ -113,7 +116,7 @@ public class DataManager {
             oos.writeObject(users);
             oos.flush();
         } catch (IOException e) {
-            e.printStackTrace();
+            JavaFXUtils.showAlert(AlertType.ERROR, "Error", "Invalid File", "IOException");
         }
     }
 
@@ -222,7 +225,7 @@ public class DataManager {
      * Checks if the given album name is already taken by the user that is currently logged in.
      * @param albumName The album name to check.
      */
-    public boolean isAlbumNameTaken(String albumName) {
+    public boolean hasAlbum(String albumName) {
         for (Album album : loggedInUser.getAlbums()) {
             if (album.getName().equals(albumName)) {
                 return true;
@@ -251,24 +254,52 @@ public class DataManager {
 
     /**
      * Sets the currently selected album.
+     * @param album The album to set as the currently selected album.
      */
     public void openAlbum(Album album) {
         openedAlbum = album;
+        if (openedAlbum.getPhotos().size() > 0) {
+            selectedPhotoIndex = 0;
+        } else {
+            selectedPhotoIndex = -1;
+        }
     }
 
     /**
-     * Closes the currently opened album.
+     * Gets the opened album name.
      */
-    public void closeAlbum() {
-        openedAlbum = null;
+    public String getOpenedAlbumName() {
+        return openedAlbum.getName();
     }
 
     /**
      * Add the given photo to the currently selected album.
+     * @param photo The photo to add.
      */
     public void addPhotoToOpenedAlbum(Photo photo) {
-
+        // Check if the photo is already in the album.
+        for (Photo p : openedAlbum.getPhotos()) {
+            if (p.equals(photo)) {
+                JavaFXUtils.showAlert(AlertType.ERROR, "Error", "Photo already in album.", "Please select a different photo.");
+                return;
+            }
+        }
+        // Add the photo to the album and the user.
         openedAlbum.addPhoto(photo);
+        loggedInUser.addPhoto(photo);
+        // Select the photo.
+        selectedPhotoIndex = openedAlbum.getPhotos().size() - 1;
+        // Write the users to the database.
+        writeUsers();
+    }
+
+    /**
+     * Remove the given photo from the currently selected album.
+     * @param photo The photo to remove.
+     */
+    public void removePhotoFromOpenedAlbum(Photo photo) {
+        // Remove the photo from the album.
+        openedAlbum.removePhoto(photo);
         writeUsers();
     }
 
@@ -277,7 +308,33 @@ public class DataManager {
      * @param imageView The ImageView to display the photo in.
      */
     public void displaySelectedPhoto(ImageView imageView) {
+        if (selectedPhotoIndex == -1) {
+            Image noImageInAlbumStockImage = new Image(getClass().getResourceAsStream("stock/Shibukawa_Kiyohiko_Meme.jpg"));
+            imageView.setImage(noImageInAlbumStockImage);
+            return;
+        }
         Photo selectedPhoto = openedAlbum.getPhotoAtIndex(selectedPhotoIndex);
         selectedPhoto.displayOn(imageView);
+    }
+
+    /**
+     * Move to the next photo in the currently opened album.
+     */
+    public void nextPhoto() {
+        selectedPhotoIndex = (selectedPhotoIndex + 1) % openedAlbum.getPhotos().size();
+    }
+
+    /**
+     * Move to the previous photo in the currently opened album.
+     */
+    public void previousPhoto() {
+        selectedPhotoIndex = (selectedPhotoIndex - 1 + openedAlbum.getPhotos().size()) % openedAlbum.getPhotos().size();
+    }
+
+    /**
+     * Closes the currently opened album.
+     */
+    public void closeAlbum() {
+        openedAlbum = null;
     }
 }
