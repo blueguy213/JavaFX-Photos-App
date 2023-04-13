@@ -311,7 +311,7 @@ public class DataManager {
     public void displaySelectedPhotoOn(ImageView imageView) {
         if (selectedPhotoIndex == -1) {
             try {
-                FileInputStream inputStream = new FileInputStream("/Users/sreekommalapati/Desktop/SchoolStuff/SoftwareMethodolody/photos/stock/Shibukawa_Kiyohiko_Meme.jpg");
+                FileInputStream inputStream = new FileInputStream("./stock/Shibukawa_Kiyohiko_Meme.jpg");
                 Image noImageInAlbumStockImage = new Image(inputStream);
                 imageView.setImage(noImageInAlbumStockImage);
                 inputStream.close();
