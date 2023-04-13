@@ -37,27 +37,24 @@
       </Button>
       <VBox layoutX="557.0" layoutY="69.0" prefHeight="461.0" prefWidth="229.0">
          <children>
-            <HBox prefHeight="39.0" prefWidth="279.0">
-               <children>
-                  <Button fx:id="addPhotoButton" mnemonicParsing="false" onAction="#handleAddPhotoButtonClick" prefHeight="32.0" prefWidth="112.0" style="-fx-background-color: #81c784; -fx-border-color: #000000; -fx-border-width: 2;" text="Add Photo">
-                     <font>
-                        <Font name="Serif Bold" size="15.0" />
-                     </font>
-                  </Button>
-                  <Pane prefHeight="39.0" prefWidth="22.0" />
-                  <Button fx:id="removePhotoButton" mnemonicParsing="false" onAction="#handleRemovePhotoButtonClick" prefHeight="32.0" prefWidth="131.0" style="-fx-background-color: #bf4040; -fx-border-color: #000000; -fx-border-width: 2;" text="Remove Photo">
-                     <font>
-                        <Font name="Serif Bold" size="15.0" />
-                     </font>
-                  </Button>
-               </children>
-            </HBox>
+            <Label prefHeight="32.0" prefWidth="109.0" text="Add a Photo:">
+               <font>
+                  <Font name="Serif Bold" size="17.0" />
+               </font>
+            </Label>
+            <TextField fx:id="addPhotoPathField" prefHeight="30.0" prefWidth="253.0" promptText="Enter photo path" style="-fx-border-color: #000000; -fx-background-color: #CCCCCC; -fx-border-width: 2;" />
+            <Pane prefHeight="12.0" prefWidth="253.0" />
+            <Button fx:id="addPhotoButton" mnemonicParsing="false" onAction="#handleAddPhotoButtonClick" prefHeight="32.0" prefWidth="112.0" style="-fx-background-color: #81c784; -fx-border-color: #000000; -fx-border-width: 2;" text="Add Photo">
+               <font>
+                  <Font name="Serif Bold" size="15.0" />
+               </font>
+            </Button>
             <Label prefHeight="32.0" prefWidth="109.0" text="Edit Caption:">
                <font>
                   <Font name="Serif Bold" size="17.0" />
                </font>
             </Label>
-            <TextField fx:id="newCaptionField" prefHeight="30.0" prefWidth="253.0" promptText="New Caption" style="-fx-border-color: #000000; -fx-background-color: #CCCCCC; -fx-border-width: 2;" />
+            <TextField fx:id="newCaptionField" prefHeight="30.0" prefWidth="253.0" promptText="Enter new caption" style="-fx-border-color: #000000; -fx-background-color: #CCCCCC; -fx-border-width: 2;" />
             <Pane prefHeight="12.0" prefWidth="253.0" />
             <Button fx:id="updateCaptionButton" mnemonicParsing="false" onAction="#handleUpdateCaptionButtonClick" prefHeight="34.0" prefWidth="256.0" style="-fx-background-color: #81c784; -fx-border-color: #000000; -fx-border-width: 2;" text="Update Caption">
                <font>
@@ -72,9 +69,9 @@
             </Label>
             <HBox prefHeight="39.0" prefWidth="279.0">
                <children>
-                  <TextField fx:id="addTagKeyField" prefHeight="30.0" prefWidth="129.0" promptText="Tag Key" style="-fx-border-color: #000000; -fx-background-color: #CCCCCC; -fx-border-width: 2;" />
+                  <TextField fx:id="addTagKeyField" prefHeight="30.0" prefWidth="129.0" promptText="Enter tag key" style="-fx-border-color: #000000; -fx-background-color: #CCCCCC; -fx-border-width: 2;" />
                   <Pane prefHeight="39.0" prefWidth="14.0" />
-                  <TextField fx:id="addTagValueField" prefHeight="30.0" prefWidth="123.0" promptText="Tag Value" style="-fx-border-color: #000000; -fx-background-color: #CCCCCC; -fx-border-width: 2;" />
+                  <TextField fx:id="addTagValueField" prefHeight="30.0" prefWidth="123.0" promptText="Enter tag value" style="-fx-border-color: #000000; -fx-background-color: #CCCCCC; -fx-border-width: 2;" />
                </children>
             </HBox>
             <Button fx:id="addTagButton" mnemonicParsing="false" onAction="#handleAddTagButtonClick" prefHeight="34.0" prefWidth="260.0" style="-fx-background-color: #81c784; -fx-border-color: #000000; -fx-border-width: 2;" text="Add Tag">
@@ -127,12 +124,12 @@
             <ImageView fx:id="photoDisplayImageView" fitHeight="223.0" fitWidth="335.0" layoutX="-1.0" layoutY="1.0" pickOnBounds="true" preserveRatio="true" />
          </children></Pane>
       <ListView fx:id="photoCaptionListView" layoutX="213.0" layoutY="307.0" prefHeight="99.0" prefWidth="335.0" style="-fx-border-color: #000000; -fx-background-color: #CCCCCC; -fx-border-width: 2;" />
-      <Button fx:id="nextPhotoButton" layoutX="414.0" layoutY="445.0" mnemonicParsing="false" onAction="#handleNextPhotoButtonClick" prefHeight="36.0" prefWidth="72.0" style="-fx-border-color: #000000; -fx-border-width: 2;" text="Next">
+      <Button fx:id="nextPhotoButton" layoutX="409.0" layoutY="421.0" mnemonicParsing="false" onAction="#handleNextPhotoButtonClick" prefHeight="36.0" prefWidth="72.0" style="-fx-border-color: #000000; -fx-border-width: 2;" text="Next">
          <font>
             <Font name="Serif Bold" size="18.0" />
          </font>
       </Button>
-      <Button fx:id="prevPhotoButton" layoutX="264.0" layoutY="445.0" mnemonicParsing="false" onAction="#handlePrevPhotoButtonClick" prefHeight="36.0" prefWidth="72.0" style="-fx-border-color: #000000; -fx-border-width: 2;" text="Prev">
+      <Button fx:id="prevPhotoButton" layoutX="279.0" layoutY="421.0" mnemonicParsing="false" onAction="#handlePrevPhotoButtonClick" prefHeight="36.0" prefWidth="72.0" style="-fx-border-color: #000000; -fx-border-width: 2;" text="Prev">
          <font>
             <Font name="Serif Bold" size="18.0" />
          </font>
@@ -142,5 +139,10 @@
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="466.0" prefWidth="169.0" />
         </content>
       </ScrollPane>
+      <Button fx:id="removePhotoButton" layoutX="315.0" layoutY="478.0" mnemonicParsing="false" onAction="#handleRemovePhotoButtonClick" prefHeight="32.0" prefWidth="131.0" style="-fx-background-color: #bf4040; -fx-border-color: #000000; -fx-border-width: 2;" text="Remove Photo">
+         <font>
+            <Font name="Serif Bold" size="15.0" />
+         </font>
+      </Button>
    </children>
 </AnchorPane>
