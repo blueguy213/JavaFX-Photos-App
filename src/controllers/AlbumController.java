@@ -78,7 +78,7 @@ public class AlbumController implements Initializable{
      * The text field for entering a date to search for.
      */
     @FXML
-    private ChoiceBox<?> destinationAlbumChoiceBox;
+    private ChoiceBox<String> destinationAlbumChoiceBox;
 
     /**
      * The button for searching for a date.
@@ -108,7 +108,7 @@ public class AlbumController implements Initializable{
      * The choice box for selecting a tag key to delete.
      */
     @FXML
-    private ListView<?> photoCaptionListView;
+    private ListView<String> photoCaptionListView;
 
     /**
      * The list view for displaying the photo captions.
@@ -150,7 +150,7 @@ public class AlbumController implements Initializable{
      * The button for searching for a photo.
      */
     @FXML
-    private ChoiceBox<?> selectTagToDeleteChoiceBox;
+    private ChoiceBox<String> selectTagToDeleteChoiceBox;
 
     /**
      * The choice box for selecting a tag key to delete.
@@ -244,6 +244,13 @@ public class AlbumController implements Initializable{
         dataManager = DataManager.getInstance();
         albumNameLabel.setText(dataManager.getOpenedAlbumName());
         dataManager.displaySelectedPhotoOn(photoDisplayImageView);
+
+
+        //selectTagToDeleteChoiceBox.getItems().addAll("Test1", "your", "mom");
+
+
+
+
     }
 
 }

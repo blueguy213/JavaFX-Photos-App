@@ -86,7 +86,7 @@
             </Label>
             <HBox prefHeight="44.0" prefWidth="253.0">
                <children>
-                  <ChoiceBox fx:id="selectTagToDeleteChoiceBox" prefHeight="26.0" prefWidth="132.0" />
+                  <ChoiceBox fx:id="selectTagToDeleteChoiceBox" prefHeight="26.0" prefWidth="132.0"/>
                   <Pane prefHeight="39.0" prefWidth="22.0" />
                   <Button fx:id="deleteTagButton" mnemonicParsing="false" onAction="#handleDeleteTagButtonClick" prefHeight="32.0" prefWidth="126.0" style="-fx-background-color: #bf4040; -fx-border-color: #000000; -fx-border-width: 2;" text="Delete Tag">
                      <font>
@@ -100,7 +100,7 @@
                   <Font name="Serif Bold" size="18.0" />
                </font>
             </Label>
-            <ChoiceBox fx:id="destinationAlbumChoiceBox" prefHeight="26.0" prefWidth="238.0" />
+            <ChoiceBox fx:id="destinationAlbumChoiceBox" prefHeight="26.0" prefWidth="238.0"/>
             <Pane prefHeight="12.0" prefWidth="253.0" />
             <HBox prefHeight="44.0" prefWidth="253.0">
                <children>
