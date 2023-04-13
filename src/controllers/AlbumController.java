@@ -169,7 +169,7 @@ public class AlbumController implements Initializable{
     void handleAddPhotoButtonClick(ActionEvent event) {
         String inputPath = addPhotoPathField.getText();
         Photo newPhoto = new Photo(inputPath,"");        
-        dataManager.addPhotoToOpenedAlbum(newPhoto);
+        
     }
 
     @FXML
