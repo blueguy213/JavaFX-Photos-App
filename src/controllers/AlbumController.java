@@ -54,7 +54,7 @@ public class AlbumController implements Initializable{
      * The button for copying a photo to another album.
      */
     @FXML
-    private Label albumNameLable;
+    private Label albumNameLabel;
 
     /**
      * The pane for displaying the album.
@@ -164,7 +164,11 @@ public class AlbumController implements Initializable{
     @FXML
     private Button viewAlbumButton;
 
+    /**
+     * The data manager instance for the application.
+     */
     private DataManager dataManager;
+
     @FXML
     void handleAddPhotoButtonClick(ActionEvent event) {
         String inputPath = addPhotoPathField.getText();
@@ -237,8 +241,8 @@ public class AlbumController implements Initializable{
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         dataManager = DataManager.getInstance();
-        albumNameLable.setText(dataManager.getOpenedAlbumName());
-        
+        albumNameLabel.setText(dataManager.getOpenedAlbumName());
+        dataManager.displaySelectedPhotoOn(photoDisplayImageView);
     }
 
 }

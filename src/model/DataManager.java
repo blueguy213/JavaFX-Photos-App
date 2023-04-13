@@ -1,6 +1,7 @@
 package model;
 
 import java.io.IOException;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileInputStream;
 import java.io.ObjectOutputStream;
@@ -307,10 +308,20 @@ public class DataManager {
      * Display the selcted photo in the given ImageView.
      * @param imageView The ImageView to display the photo in.
      */
-    public void displaySelectedPhoto(ImageView imageView) {
+    public void displaySelectedPhotoOn(ImageView imageView) {
         if (selectedPhotoIndex == -1) {
-            Image noImageInAlbumStockImage = new Image(getClass().getResourceAsStream("stock/Shibukawa_Kiyohiko_Meme.jpg"));
-            imageView.setImage(noImageInAlbumStockImage);
+            try {
+                FileInputStream inputStream = new FileInputStream("./stock/Shibukawa_Kiyohiko_Meme.jpg");
+                Image noImageInAlbumStockImage = new Image(inputStream);
+                imageView.setImage(noImageInAlbumStockImage);
+                inputStream.close();
+            } catch (FileNotFoundException e) {
+                // Handle the exception if the image file is not found
+                JavaFXUtils.showAlert(AlertType.ERROR, "Error", "Stock image not found.", "Fix needed :/");
+            } catch (IOException e) {
+                // Handle the exception if there's an error closing the FileInputStream
+                JavaFXUtils.showAlert(AlertType.ERROR, "Error", "Error closing FileInputStream.", "Fix needed :/");
+            }
             return;
         }
         Photo selectedPhoto = openedAlbum.getPhotoAtIndex(selectedPhotoIndex);
