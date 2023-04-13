@@ -209,9 +209,7 @@ public class AlbumController implements Initializable{
 
     @FXML
     void handleNextPhotoButtonClick(ActionEvent event) {
-        // DataManager dmInstance = DataManager.getInstance();
-        // dmInstance.selectedAlbum
-        
+        // DataManager dmInstance =
     }
 
     @FXML
@@ -231,7 +229,7 @@ public class AlbumController implements Initializable{
 
     @FXML
     void handleUpdateCaptionButtonClick(ActionEvent event) {
-
+          
     }
 
     @FXML

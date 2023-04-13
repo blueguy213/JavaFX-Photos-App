@@ -31,7 +31,7 @@ public class SearchController implements Initializable {
     private AnchorPane albumPane;
 
     @FXML
-    private ChoiceBox<?> andOrChoiceBox;
+    private ChoiceBox<String> andOrChoiceBox;
 
     @FXML
     private Button dateSearchButton;
@@ -40,7 +40,7 @@ public class SearchController implements Initializable {
     private Button exportNewAlbumButton;
 
     @FXML
-    private ChoiceBox<?> firstTagChoiceBox;
+    private ChoiceBox<String> firstTagChoiceBox;
 
     @FXML
     private TextField firstTagField;
@@ -55,7 +55,7 @@ public class SearchController implements Initializable {
     private Button nextPhotoButton;
 
     @FXML
-    private ListView<?> photoCaptionListView;
+    private ListView<String> photoCaptionListView;
 
     @FXML
     private ImageView photoDisplayImageView;
@@ -73,7 +73,7 @@ public class SearchController implements Initializable {
     private Button searchPhotoButton;
 
     @FXML
-    private ChoiceBox<?> secondTagChoiceBox;
+    private ChoiceBox<String> secondTagChoiceBox;
 
     @FXML
     private TextField secondTagField;
@@ -89,7 +89,6 @@ public class SearchController implements Initializable {
 
     private DataManager dataManager;
 
-  
     /**
      * Handles the serch by date button click event. 
      */
@@ -153,6 +152,7 @@ public class SearchController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         dataManager = DataManager.getInstance();
+        dataManager.displaySelectedPhotoOn(photoDisplayImageView);
     }
 
 }

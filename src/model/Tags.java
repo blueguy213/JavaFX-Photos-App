@@ -1,5 +1,8 @@
 package model;
 
+import java.io.Serializable;
+
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,7 +12,7 @@ import javafx.util.Pair;
  * This class represents a list of tags in the application. Each tag is a <key, value> pair.
  * @author Sree Kommalapati and Shreeti Patel
  */
-public class Tags {
+public class Tags implements Serializable {
 
     /**
      * The list of tags.

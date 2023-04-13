@@ -98,7 +98,7 @@ public class DataManager {
             }
             ois.close();
         } catch (IOException | ClassNotFoundException e) {
-            JavaFXUtils.showAlert(AlertType.ERROR, "Error", "Invalid File", "IOException | ClassNotFoundException");
+            JavaFXUtils.showAlert(AlertType.ERROR, "Error", "Invalid File", e.getMessage());
         }
     }
 
