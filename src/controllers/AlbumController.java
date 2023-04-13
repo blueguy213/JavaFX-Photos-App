@@ -15,6 +15,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import model.DataManager;
+import model.Photo;
 import utils.JavaFXUtils;
 
 public class AlbumController implements Initializable{
@@ -24,6 +25,12 @@ public class AlbumController implements Initializable{
      */
     @FXML
     private Button addPhotoButton;
+    
+    /**
+     * The text field for the path for a photo to add to the album.
+     */
+    @FXML
+    private TextField addPhotoPathField;
 
     /**
      * The button for adding a tag to the photo.
@@ -164,7 +171,9 @@ public class AlbumController implements Initializable{
 
     @FXML
     void handleAddPhotoButtonClick(ActionEvent event) {
-        
+        String inputPath = addPhotoPathField.getText();
+        Photo newPhoto = new Photo(inputPath,"");        
+        dataManager.addPhotoToOpenedAlbum(newPhoto);
     }
 
     @FXML
