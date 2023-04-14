@@ -22,6 +22,8 @@ public class ImageUtils {
 
         // Read the file's last modified time in milliseconds since the Unix epoch
         long lastModifiedEpochMillis = file.lastModified();
+
+        System.out.println(lastModifiedEpochMillis);
     
         // Convert the epoch milliseconds to LocalDateTime using the system's default time zone
         LocalDateTime lastModifiedDateTime = LocalDateTime.ofInstant(Instant.ofEpochMilli(lastModifiedEpochMillis), ZoneId.systemDefault());

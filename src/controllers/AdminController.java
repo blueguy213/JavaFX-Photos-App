@@ -15,26 +15,50 @@ import javafx.scene.control.Alert.AlertType;
 import model.DataManager;
 
 import utils.JavaFXUtils;
-
+/**
+ * The controller for the Admin view.
+ * @author  Sree Kommalapati and Shreeti Patel
+ */
 public class AdminController implements Initializable {
-
+    /**
+     * The text field for entering a username for a new user.
+     */
     @FXML
     private TextField adminUserField;
-
+     
+    /**
+     * The list view for seeing all non-admin users.
+     */
     @FXML
     private ListView<String> adminUserList;
 
+     /**
+     * The button for creating a new user.
+     */
     @FXML
     private Button createUserButton;
 
+     /**
+     * The button for deleting the selected user.
+     */
     @FXML
     private Button deleteUserButton;
 
+     /**
+     * The button to log out.
+     */
     @FXML
     private Button logOutButton;
 
+     /**
+     * Private DataManger instance for AdminContoller.
+     */
     private DataManager dataManager;
 
+     /**
+     * Creates a new user when create user button is clicked
+     * @param event The ActionEvent that triggered this method.
+     */
     @FXML
     public void onCreateUser(ActionEvent event) {
 
@@ -58,7 +82,10 @@ public class AdminController implements Initializable {
         // Clear the text field
         adminUserField.clear();
     }
-
+     /**
+     * Deletes a user when delete user button is clicked
+     * @param event The ActionEvent that triggered this method.
+     */
     @FXML
     public void onDeleteUser(ActionEvent event) {
 
@@ -81,11 +108,21 @@ public class AdminController implements Initializable {
         dataManager.updateUserListView(adminUserList);
     }
 
+    /**
+     * Logs out when logout button is clicked
+     * @param event The ActionEvent that triggered this method.
+     */
     @FXML
     public void onLogOut(ActionEvent event) {
         JavaFXUtils.switchView(event, "/views/Login.fxml");
     }
 
+   /**
+    * Initializes the controller class for the corresponding FXML file.
+    * It sets the data manager to be the singleton instance of the DataManager class and updates the admin user list view using the DataManager instance.
+    * @param location The URL location of the FXML file.
+    * @param resources The ResourceBundle used by the FXMLLoader.
+    */
     @FXML
     public void initialize(URL location, ResourceBundle resources) {
         dataManager = DataManager.getInstance();

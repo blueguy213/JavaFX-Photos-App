@@ -347,7 +347,7 @@ public class DataManager {
         openedAlbum.removePhoto(openedAlbum.getPhotos().get(selectedPhotoIndex));
         // Update the user's photo set
         loggedInUser.updatePhotoSet();
-        // Update the selected photo index.
+        // Update the selected photo index if necessary.
         selectedPhotoIndex = Math.min(selectedPhotoIndex, openedAlbum.getPhotos().size() - 1);
         // Display the selected photo.
         // Write the users to the database.
@@ -614,8 +614,8 @@ public class DataManager {
      */
     public void closeAlbum() {
         selectedPhotoIndex = 0;
-        writeUsers();
         openedAlbum = null;
+        writeUsers();
     }
 
     /**
@@ -624,23 +624,6 @@ public class DataManager {
     public void prepareSearchResults() {
         searchResults.clear();
         searchResults.addAll(loggedInUser.getPhotos());
-    }
-
-    /**
-     * Filter the search results by the date range
-     */
-    public void filterSearchResultsByDateRange(LocalDate startDate, LocalDate endDate) {
-
-        prepareSearchResults();
-
-        Date start = startDate != null ? Date.from(startDate.atStartOfDay(ZoneId.systemDefault()).toInstant()) : null;
-        Date end = endDate != null ? Date.from(endDate.atStartOfDay(ZoneId.systemDefault()).toInstant()) : null;
-
-        searchResults = searchResults.stream()
-            .filter(photo -> {
-                Date photoDate = Date.from(photo.getDate().atZone(ZoneId.systemDefault()).toInstant());
-                return (start == null || !photoDate.before(start)) && (end == null || !photoDate.after(end));
-            }).collect(Collectors.toList());
     }
 
     /**
@@ -660,6 +643,24 @@ public class DataManager {
     }
 
     /**
+     * Filter the search results by the date range
+     */
+    public void filterSearchResultsByDateRange(LocalDate startDate, LocalDate endDate) {
+
+        prepareSearchResults();
+
+        Date start = startDate != null ? Date.from(startDate.atStartOfDay(ZoneId.systemDefault()).toInstant()) : null;
+        Date end = endDate != null ? Date.from(endDate.atStartOfDay(ZoneId.systemDefault()).toInstant()) : null;
+
+        searchResults = searchResults.stream()
+            .filter(photo -> {
+                Date photoDate = Date.from(photo.getDate().atZone(ZoneId.systemDefault()).toInstant());
+                return (start == null || !photoDate.before(start)) && (end == null || !photoDate.after(end));
+            }).collect(Collectors.toList());
+        selectedPhotoIndex = 0; 
+    }
+
+    /**
      * Filter the search results by the single give tag
      * @param key The key of the tag.
      * @param value The value of the tag.
@@ -672,6 +673,7 @@ public class DataManager {
             .filter(photo -> photo.getTags().getPairs().stream()
                 .anyMatch(tag -> tag.getKey().equals(key) && tag.getValue().equals(value)))
             .collect(Collectors.toList());
+        selectedPhotoIndex = 0;
     }
 
 
@@ -692,6 +694,7 @@ public class DataManager {
             .filter(photo -> photo.getTags().getPairs().stream()
                 .anyMatch(tag -> tag.getKey().equals(key2) && tag.getValue().equals(value2)))
             .collect(Collectors.toList());
+        selectedPhotoIndex = 0;
     }
 
     /**
@@ -714,6 +717,7 @@ public class DataManager {
             .filter(photo -> photo.getTags().getPairs().stream()
                 .anyMatch(tag -> tag.getKey().equals(key2) && tag.getValue().equals(value2)))
             .collect(Collectors.toList()));
+        selectedPhotoIndex = 0;
     }
 
     /**

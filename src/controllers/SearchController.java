@@ -29,59 +29,116 @@ import utils.JavaFXUtils;
 
 public class SearchController implements Initializable {
 
+    /**
+     * The DatePicker for selecting the start date to search by.
+     */
     @FXML
     private DatePicker startDatePicker;
 
+    /**
+     * The DatePicker for selecting the end date to search by.
+     */
     @FXML
     private DatePicker endDatePicker;
 
+    /**
+     * The Button for searching by date.
+     */
     @FXML
     private Button dateSearchButton;
 
+    /**
+     * The Button for going to the previous photo.
+     */
     @FXML
     private Button prevPhotoButton;
 
+    /**
+     * The Button for going to the next photo.
+     */
     @FXML
     private Button nextPhotoButton;
 
+    /**
+     * The ChoiceBox for selecting the first tag to serach by.
+     */
     @FXML
     private ChoiceBox<String> firstTagChoiceBox;
     
+     /**
+     * The ChoiceBox for selecting and/or to set a condition to search with a second tag. 
+     */
     @FXML
     private ChoiceBox<String> andOrChoiceBox;
 
+     /**
+     * The ChoiceBox for selecting the second tag to serach by.
+     */
     @FXML
     private ChoiceBox<String> secondTagChoiceBox;
 
+     /**
+     * The button to search by tags.
+     */
     @FXML
     private Button tagSearchButton;
 
+     /**
+     * The TilePane to view thumbnails of photos.
+     */
     @FXML
     private TilePane thumbnailTilePane;
 
+    /**
+     * The ImageView to view the display of the selected photo.
+     */
     @FXML
     private ImageView photoDisplayImageView;
 
+    /**
+     * The TextArea for the photo description.
+     */
     @FXML
     private TextArea photoDescriptionTextArea;
 
+    /**
+     * The TextField for the export destination.
+     */
     @FXML
     private TextField exportDestinationTextField;
 
+    /**
+     * The Button to export as a new album.
+     */
     @FXML
     private Button exportNewAlbumButton;
 
+    /**
+     * The Button for View Album.
+     */
     @FXML
     private Button viewAlbumButton;
 
+    /**
+     * The Button for Search Photo.
+     */
     @FXML
     private Button searchPhotoButton;
 
+    /**
+     * The Button for LogOut.
+     */
     @FXML
     private Button logOutButton;
 
+    /**
+     * The DataManager instance for the Search Controller.
+     */
     private DataManager dataManager;
 
+    /**
+     * Updates display on Search view
+     */
     private void updateDisplay() {
         dataManager.displaySelectedPhotoOn(photoDisplayImageView, photoDescriptionTextArea);
         dataManager.displayThumbnailsOn(thumbnailTilePane);
@@ -91,6 +148,7 @@ public class SearchController implements Initializable {
 
     /**
      * Handles the serch by date button click event. 
+     * @param event The ActionEvent that triggered this method.
      */
     @FXML
     void handleDateSearchButtonClick(ActionEvent event) {
@@ -102,7 +160,10 @@ public class SearchController implements Initializable {
 
         updateDisplay();
     }
-
+    /**
+     * Handles the Export New Album button click event
+     * @param event The ActionEvent that triggered this method.
+     */
     @FXML
     void handleExportNewAlbumButtonClick(ActionEvent event) {
         String exportAlbumName = exportDestinationTextField.getText();
@@ -116,6 +177,10 @@ public class SearchController implements Initializable {
         dataManager.exportSearchResultsToAlbum(exportAlbumName);
     }
 
+     /**
+     * Handles the Log Out button click event
+     * @param event The ActionEvent that triggered this method.
+     */
     @FXML
     void handleLogOutButtonClick(ActionEvent event) {
         // Save the user data
@@ -125,24 +190,40 @@ public class SearchController implements Initializable {
         JavaFXUtils.switchView(event, "/views/Login.fxml");
     }
 
+     /**
+     * Handles the Next Photo button click event
+     * @param event The ActionEvent that triggered this method.
+     */
     @FXML
     void handleNextPhotoButtonClick(ActionEvent event) {
         dataManager.nextPhoto();
         updateDisplay();
     }
 
+    /**
+     * Handles the Prev Photo button click event
+     * @param event The ActionEvent that triggered this method.
+     */
     @FXML
     void handlePrevPhotoButtonClick(ActionEvent event) {
         dataManager.previousPhoto();
         updateDisplay();
     }
 
+    /**
+     * Handles the Search Photos button click event
+     * @param event The ActionEvent that triggered this method.
+     */
     @FXML
     void handleSearchPhotosButtonClick(ActionEvent event) {
         dataManager.prepareSearchResults();
         updateDisplay();
     }
 
+    /**
+     * Handles the Tag Search Photo button click event
+     * @param event The ActionEvent that triggered this method.
+     */
     @FXML
     void handleTagSearchButtonClick(ActionEvent event) {
         
@@ -188,12 +269,21 @@ public class SearchController implements Initializable {
         updateDisplay();
 
     }
-
+    /**
+     * Handles the View Album button click event
+     * @param event The ActionEvent that triggered this method.
+     */
     @FXML
     void handleViewAlbumButtonClick(ActionEvent event) {
         JavaFXUtils.switchView(event, "/views/User.fxml");
     }
 
+    /**
+     * Initializes the controller class for the corresponding FXML file.
+     * It sets the data manager to be the singleton instance of the DataManager class.
+     * @param location The URL location of the FXML file.
+     * @param resources The ResourceBundle used by the FXMLLoader.
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         dataManager = DataManager.getInstance();

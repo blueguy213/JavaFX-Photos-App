@@ -35,7 +35,10 @@ import model.DataManager;
 import model.Photo;
 
 import utils.JavaFXUtils;
-
+/**
+ * The controller for the Album view.
+ * @author  Sree Kommalapati and Shreeti Patel
+ */
 public class AlbumController implements Initializable{
 
     /**
@@ -193,6 +196,9 @@ public class AlbumController implements Initializable{
      */
     private DataManager dataManager;
 
+    /**
+     * Updates display on Album view
+     */
     private void updateDisplay() {
         dataManager.displaySelectedPhotoOn(photoDisplayImageView, photoDescriptionTextArea);
         dataManager.displayThumbnailsOn(thumbnailTilePane);
@@ -203,6 +209,7 @@ public class AlbumController implements Initializable{
 
     /**
      * Handles the add photo button click event.
+     * @param event The ActionEvent that triggered this method.
      */
     @FXML
     void handleAddPhotoButtonClick(ActionEvent event) {
@@ -243,6 +250,7 @@ public class AlbumController implements Initializable{
 
     /**
      * Handles the add tag button click event.
+     * @param event The ActionEvent that triggered this method.
      */
     @FXML
     void handleAddTagButtonClick(ActionEvent event) {
@@ -264,6 +272,7 @@ public class AlbumController implements Initializable{
 
     /**
      * Handles the copy photo button click event.
+     * @param event The ActionEvent that triggered this method.
      */
     @FXML
     void handleCopyPhotoButtonClick(ActionEvent event) {
@@ -273,6 +282,7 @@ public class AlbumController implements Initializable{
 
     /**
      * Handles the delete tag button click event.
+     * @param event The ActionEvent that triggered this method.
      */
     @FXML
     void handleDeleteTagButtonClick(ActionEvent event) {
@@ -287,6 +297,10 @@ public class AlbumController implements Initializable{
         updateDisplay();
     }
 
+    /**
+     * Handles the logout button click event.
+     * @param event The ActionEvent that triggered this method.
+     */
     @FXML
     void handleLogOutButtonClick(ActionEvent event) {
         dataManager.closeAlbum();
@@ -294,6 +308,10 @@ public class AlbumController implements Initializable{
         JavaFXUtils.switchView(event, "/views/Login.fxml");
     }
 
+    /**
+     * Handles the Move Photo button click event.
+     * @param event The ActionEvent that triggered this method.
+     */
     @FXML
     void handleMovePhotoButtonClick(ActionEvent event) {
         String destinationAlbumName = destinationAlbumChoiceBox.getValue();
@@ -303,42 +321,72 @@ public class AlbumController implements Initializable{
         updateDisplay();
     }
 
+     /**
+     * Handles the Next Photo button click event.
+     * @param event The ActionEvent that triggered this method.
+     */
     @FXML
     void handleNextPhotoButtonClick(ActionEvent event) {
         dataManager.nextPhoto();
         updateDisplay();
     }
 
+     /**
+     * Handles the Prev Photo button click event.
+     * @param event The ActionEvent that triggered this method.
+     */
     @FXML
     void handlePrevPhotoButtonClick(ActionEvent event) {
         dataManager.previousPhoto();
         updateDisplay();
     }
 
+     /**
+     * Handles the Remove Photo button click event.
+     * @param event The ActionEvent that triggered this method.
+     */
     @FXML
     void handleRemovePhotoButtonClick(ActionEvent event) {
         dataManager.removeSelectedPhoto();
         updateDisplay();
     }
 
+     /**
+     * Handles the Search Photos button click event.
+     * @param event The ActionEvent that triggered this method.
+     */
     @FXML
     void handleSearchPhotosButtonClick(ActionEvent event) {
         dataManager.closeAlbum();
         JavaFXUtils.switchView(event, "/views/Search.fxml");
     }
 
+     /**
+     * Handles the Update Caption button click event.
+     * @param event The ActionEvent that triggered this method.
+     */
     @FXML
     void handleUpdateCaptionButtonClick(ActionEvent event) {
         String newCaption = newCaptionField.getText();
         dataManager.setCaption(newCaption);
         updateDisplay();
     }
-
+    
+    /**
+     * Handles the View Albums button click event.
+     * @param event The ActionEvent that triggered this method.
+     */
     @FXML
     void handleViewAlbumsButtonClick(ActionEvent event) {
         JavaFXUtils.switchView(event, "/views/User.fxml");
     }
 
+    /**
+     * Initializes the controller class for the corresponding FXML file.
+     * It sets the data manager to be the singleton instance of the DataManager class.
+     * @param location The URL location of the FXML file.
+     * @param resources The ResourceBundle used by the FXMLLoader.
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         dataManager = DataManager.getInstance();

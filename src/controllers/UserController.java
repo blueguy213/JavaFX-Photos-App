@@ -62,7 +62,7 @@ public class UserController implements Initializable {
     private Label selectedAlbumDateRange;
 
     /**
-     * The DataManager instance for the application.
+     * The DataManager instance for the User Controller.
      */
     private DataManager dataManager;
 

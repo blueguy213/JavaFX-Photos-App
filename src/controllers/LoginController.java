@@ -12,18 +12,33 @@ import utils.JavaFXUtils;
 
 public class LoginController {
     
+    /**
+     * The text field for entering a username.
+     */
     @FXML
     private TextField usernameField;
+
+    /**
+     * The button for logging in.
+     */
     @FXML
     private Button loginButton;
 
+     /**
+     * The DataManager instance for the Login Controller.
+     */
     private DataManager dataManager;
 
+    
     public LoginController() {
         dataManager = DataManager.getInstance();
         dataManager.readUsers();
     }
 
+    /**
+     * Handles the Login button click event
+     * @param event The ActionEvent that triggered this method.
+     */
     @FXML
     public void handleLoginButtonClick(ActionEvent event) {
         // Get the input username

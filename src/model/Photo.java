@@ -56,8 +56,12 @@ public class Photo implements Serializable {
      */
     public LocalDateTime getDate() {
         return dateTime;
-    }
+    } 
 
+    /**
+     * Returns the Tags of the photo.
+     * @return the tags of the photo
+     */
     public Tags getTags() {
         return tags;
     }
@@ -78,10 +82,20 @@ public class Photo implements Serializable {
         return dateTime;
     }
 
+     /**
+     * Adds a tag to a photo.
+     * @param name the name of the tag
+     * @param value the value of the tag
+     */
     public void addTag(String name, String value) {
         tags.add(name, value);
     }
 
+    /**
+     * Removes a tag from a photo.
+     * @param name the name of the tag
+     * @param value the value of the tag
+     */
     public void removeTag(String name, String value) {
         tags.remove(name, value);
     }
