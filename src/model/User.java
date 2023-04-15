@@ -10,7 +10,7 @@ import java.util.Set;
  * This class represents a user in the application. A user has a username and a list of albums.
  * @author Sree Kommalapati and Shreeti Patel
  */
-class User implements Serializable {
+public class User implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
