@@ -8,7 +8,7 @@
             "type": "java",
             "name": "Sree Kommalapati",
             "request": "launch",
-            "mainClass": "app.PhotoLibrary",
+            "mainClass": "app.Photos",
             "preLaunchTask": "compile",
             "vmArgs": "--module-path '/Users/sreekommalapati/Desktop/SchoolStuff/SoftwareMethodolody/javafx-sdk-19.0.2.1/lib' --add-modules javafx.controls,javafx.fxml"
         },
@@ -16,7 +16,7 @@
             "type": "java",
             "name": "Shreeti Patel",
             "request": "launch",
-            "mainClass": "app.PhotoLibrary",
+            "mainClass": "app.Photos",
             "preLaunchTask": "compile",
             "vmArgs": "--module-path /Users/shreetipatel/Documents/javafx-sdk-19.0.2.1/lib --add-modules javafx.controls,javafx.fxml,javafx.graphics,javafx.base"
         }

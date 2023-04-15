@@ -6,8 +6,6 @@ import java.util.List;
 import java.util.HashSet;
 import java.util.Set;
 
-import javafx.util.Pair;
-
 /**
  * This class represents a user in the application. A user has a username and a list of albums.
  * @author Sree Kommalapati and Shreeti Patel
