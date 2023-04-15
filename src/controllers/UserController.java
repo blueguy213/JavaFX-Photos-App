@@ -114,8 +114,8 @@ public class UserController implements Initializable {
             JavaFXUtils.showAlert(AlertType.ERROR, "Error", "No Album Selected", "You must select an album to update.");
             return;
         }
-        dataManager.renameAlbum(newName);
-        albumsListView.refresh();
+        dataManager.renameAlbum(selectedAlbumName, newName);
+        dataManager.displayAlbumsOn(albumsListView);
     }
 
     /**

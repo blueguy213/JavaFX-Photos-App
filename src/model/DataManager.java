@@ -166,6 +166,7 @@ public class DataManager {
         readUsers();
         for (User user : users) {
             if (user.getUsername().equals(username)) {
+                System.out.println("Getting user " + username);
                 return user;
             }
         }
@@ -302,8 +303,8 @@ public class DataManager {
     /**
      * Changes the selected album name to the given name.
      */
-    public void renameAlbum(String newName) {
-        openedAlbum.setName(newName);
+    public void renameAlbum(String oldName, String newName) {
+        loggedInUser.getAlbumByName(oldName).setName(newName);
         writeUsers();
     }
 
