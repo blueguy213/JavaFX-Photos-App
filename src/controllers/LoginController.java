@@ -29,7 +29,7 @@ public class LoginController {
      */
     private DataManager dataManager;
 
-    
+  
     public LoginController() {
         dataManager = DataManager.getInstance();
         dataManager.readUsers();

@@ -7,7 +7,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-public class PhotoLibrary extends Application {
+public class Photos extends Application {
 	@Override
 	public void start(Stage primaryStage) throws Exception {			
 		// set up FXML load

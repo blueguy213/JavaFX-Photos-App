@@ -570,7 +570,7 @@ public class DataManager {
             }
             // Split the tag into its key and value.
             String[] tagParts = tag.split(": ");
-            System.out.println(tagParts[0] + " " + tagParts[1]);
+            //System.out.println(tagParts[0] + " " + tagParts[1]);
             // Delete the tag from the photo.
             openedAlbum.getPhotoAtIndex(selectedPhotoIndex).removeTag(tagParts[0], tagParts[1]);
             // Update the user's tags.
