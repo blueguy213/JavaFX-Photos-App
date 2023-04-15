@@ -166,7 +166,7 @@ public class DataManager {
         readUsers();
         for (User user : users) {
             if (user.getUsername().equals(username)) {
-                System.out.println("Getting user " + username);
+                //System.out.println("Getting user " + username);
                 return user;
             }
         }
@@ -544,8 +544,8 @@ public class DataManager {
      * @param isUnique The repeatability of the tag.
      */
     public void addTagToSelectedPhoto(String key, String value, boolean isUnique) {
-        System.out.println("Key: '" + key + "' Value: '" + value + "'");
-        System.out.println("Is Unique: " + isUnique);
+        //System.out.println("Key: '" + key + "' Value: '" + value + "'");
+        //System.out.println("Is Unique: " + isUnique);
         if (openedAlbum == null) {
             // Prevent the user from adding a tag to a photo that is not in an album.
             JavaFXUtils.showAlert(AlertType.ERROR, "Error", "Cannot add tag to photo not in an album.", "Fix needed :/");
@@ -558,7 +558,7 @@ public class DataManager {
             } else if (openedAlbum.getPhotoAtIndex(selectedPhotoIndex).getTags().containsKey(key)) { // Check if the tag already exists for the photo.
                 // Get the repeatability of the existing tag.
                 boolean isOldTagUnique = openedAlbum.getPhotoAtIndex(selectedPhotoIndex).getTags().isKeyUnique(key);
-                System.out.println("Is Old Tag Unique: " + isOldTagUnique);
+                //System.out.println("Is Old Tag Unique: " + isOldTagUnique);
                 // Check if the new and old tags match.
                 if (isUnique != isOldTagUnique) {
                     // Prevent the user from adding a tag that already exists.
