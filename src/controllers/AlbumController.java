@@ -267,7 +267,7 @@ public class AlbumController implements Initializable {
         }
 
         // Check if the tag should be unique
-        if (isTagUnique.isSelected() && dataManager.hasTag(key, value)) {
+        if (isTagUnique.isSelected() && dataManager.hasTagKey(key)) {
             JavaFXUtils.showAlert(AlertType.ERROR, "Error", "Invalid Tag", "That tag is unique and already exists.");
             return;
         }

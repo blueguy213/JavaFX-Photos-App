@@ -86,4 +86,16 @@ class Tags implements Serializable {
         }
         return false;
     }
+
+    /**
+     * Checks if the list of tags contains a tag with the given key. 
+     */
+    public boolean containsKey(String key) {
+        for (Pair<String, Pair<Boolean, String>> tag : tags) {
+            if (tag.getKey().equals(key)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

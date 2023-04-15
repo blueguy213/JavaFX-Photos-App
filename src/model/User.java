@@ -60,11 +60,6 @@ class User implements Serializable {
      */
     public void removeAlbum(Album album) {
         this.albums.remove(album);
-        for (Photo photo : album.getPhotos()) {
-            if (photos.contains(photo)) {
-                photos.remove(photo);
-            }
-        }
     }
 
     /**

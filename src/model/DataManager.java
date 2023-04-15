@@ -314,6 +314,7 @@ public class DataManager {
      */
     public void removeAlbum(String albumname) {
         loggedInUser.removeAlbum(new Album(albumname));
+        loggedInUser.updatePhotoSet();
         writeUsers();
     }
 
@@ -528,8 +529,12 @@ public class DataManager {
      * @param key The key of the tag.
      * @param value The value of the tag.
      */
-    public boolean hasTag(String key, String value) {
-        return loggedInUser.getTags().contains(key, value);
+    public boolean hasTagKey(String key) {
+        if (openedAlbum == null) {
+            return searchResults.get(selectedPhotoIndex).getTags().containsKey(key);
+        } else {
+            return openedAlbum.getPhotoAtIndex(selectedPhotoIndex).getTags().containsKey(key);
+        }
     }
 
     /**
@@ -550,9 +555,9 @@ public class DataManager {
                 // Prevent the user from adding a tag that already exists.
                 JavaFXUtils.showAlert(AlertType.ERROR, "Error", "Tag already exists.", "Add a new tag.");
                 return;
-            } else if (loggedInUser.getTags().contains(key, value)) { // Check if the tag already exists for the user.
+            } else if (openedAlbum.getPhotoAtIndex(selectedPhotoIndex).getTags().containsKey(key)) { // Check if the tag already exists for the photo.
                 // Get the repeatability of the existing tag.
-                boolean isOldTagUnique = loggedInUser.getTags().isKeyUnique(key);
+                boolean isOldTagUnique = openedAlbum.getPhotoAtIndex(selectedPhotoIndex).getTags().isKeyUnique(key);
                 System.out.println("Is Old Tag Unique: " + isOldTagUnique);
                 // Check if the new and old tags match.
                 if (isUnique != isOldTagUnique) {
