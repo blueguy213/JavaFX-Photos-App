@@ -14,7 +14,6 @@ import javafx.event.ActionEvent;
 
 import java.util.ResourceBundle;
 
-import model.Album;
 import model.DataManager;
 
 import utils.JavaFXUtils;
@@ -41,25 +40,25 @@ public class UserController implements Initializable {
      * The ListView for displaying the user's albums.
      */
     @FXML
-    private ListView<Album> albumsListView;
+    private ListView<String> albumsListView;
     
     /**
      * The label for displaying the selected album's name.
      */
     @FXML
-    private Label selectedAlbumName;
+    private Label selectedAlbumNameLabel;
     
     /**
      * The label for displaying the selected album's photo count.
      */
     @FXML
-    private Label selectedAlbumPhotoCount;
+    private Label selectedAlbumPhotoCountLabel;
     
     /**
      * The label for displaying the selected album's date range.
      */
     @FXML
-    private Label selectedAlbumDateRange;
+    private Label selectedAlbumDateRangeLabel;
 
     /**
      * The DataManager instance for the User Controller.
@@ -80,13 +79,11 @@ public class UserController implements Initializable {
         dataManager = DataManager.getInstance();
 
         // Add the album names to the ListView
-        dataManager.updateAlbumListView(albumsListView);
+        dataManager.displayAlbumsOn(albumsListView);
 
         // Set the listener for the albumsListView
         albumsListView.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
-            if (newSelection != null) {
-                updateAlbumInfo(newSelection);
-            }
+            dataManager.displayAlbumInfoOn(selectedAlbumNameLabel, selectedAlbumPhotoCountLabel, selectedAlbumDateRangeLabel, newSelection);
         });
 
         // Select the first album in the list
@@ -106,20 +103,18 @@ public class UserController implements Initializable {
             // Show an error dialog or message
             JavaFXUtils.showAlert(AlertType.ERROR, "Error", "No Name Entered", "You must enter a name.");
             return;
-        }
-        // Check if the new name is already in use
-        if (dataManager.hasAlbum(newName)) {
+        } else if (dataManager.hasAlbum(newName)) { // Check if the new name is already in use
             // Show an error dialog or message indicating the album name is already in use
             JavaFXUtils.showAlert(AlertType.ERROR, "Error", "Invalid Album Name", "The album name you entered is already in use.");
             return;
         }
-        Album selectedAlbum = albumsListView.getSelectionModel().getSelectedItem();
-        if (selectedAlbum == null) {
+        String selectedAlbumName = albumsListView.getSelectionModel().getSelectedItem();
+        if (selectedAlbumName == null || selectedAlbumName.isEmpty()) {
             // Show an error dialog or message indicating the user must select an album
             JavaFXUtils.showAlert(AlertType.ERROR, "Error", "No Album Selected", "You must select an album to update.");
             return;
         }
-        selectedAlbum.setName(newName);
+        dataManager.renameAlbum(newName);
         albumsListView.refresh();
     }
 
@@ -130,15 +125,15 @@ public class UserController implements Initializable {
     @FXML
     public void handleDeleteSelectedAlbumButtonClick(ActionEvent event) {
         // Delete the selected album from the user's albums list and the albumsListView
-        Album selectedAlbum = albumsListView.getSelectionModel().getSelectedItem();
-        if (selectedAlbum == null) {
+        String selectedAlbumName = albumsListView.getSelectionModel().getSelectedItem();
+        if (selectedAlbumName == null) {
             // Show an error dialog or message indicating the user must select an album
             JavaFXUtils.showAlert(AlertType.ERROR, "Error", "No Album Selected", "You must select an album to delete.");
             return;
         }
-        dataManager.removeAlbum(selectedAlbum);
-        albumsListView.getItems().remove(selectedAlbum);
-        updateAlbumInfo(albumsListView.getSelectionModel().getSelectedItem());
+        dataManager.removeAlbum(selectedAlbumName);
+        albumsListView.getItems().remove(selectedAlbumName);
+        dataManager.displayAlbumInfoOn(selectedAlbumNameLabel, selectedAlbumPhotoCountLabel, selectedAlbumDateRangeLabel, albumsListView.getSelectionModel().getSelectedItem());
     }
 
     /**
@@ -161,10 +156,9 @@ public class UserController implements Initializable {
             JavaFXUtils.showAlert(AlertType.ERROR, "Error", "Invalid Album Name", "The album name you entered is already in use.");
             return;
         }
-        Album album = new Album(name);
-        dataManager.addAlbum(album);
-        dataManager.updateAlbumListView(albumsListView);
-        albumsListView.getSelectionModel().select(album);
+        dataManager.addAlbum(name);
+        dataManager.displayAlbumsOn(albumsListView);
+        albumsListView.getSelectionModel().select(name);
     }
 
     /**
@@ -174,13 +168,13 @@ public class UserController implements Initializable {
     @FXML
     public void handleOpenSelectedAlbumButtonClick(ActionEvent event) {
         // Implement the logic for opening the selected album
-        Album selectedAlbum = albumsListView.getSelectionModel().getSelectedItem();
-        if (selectedAlbum == null) {
+        String selectedAlbumName = albumsListView.getSelectionModel().getSelectedItem();
+        if (selectedAlbumName == null || selectedAlbumName.isEmpty()) {
             // Show an error dialog or message indicating the user must select an album
             JavaFXUtils.showAlert(AlertType.ERROR, "Error", "No Album Selected", "You must select an album to open.");
             return;
         }
-        dataManager.openAlbum(selectedAlbum);
+        dataManager.openAlbum(selectedAlbumName);
         JavaFXUtils.switchView(event, "/views/Album.fxml");
     }
 
@@ -205,29 +199,5 @@ public class UserController implements Initializable {
         // Set the loggedInUser to null and switch to the Login view
         dataManager.logOut();
         JavaFXUtils.switchView(event, "/views/Login.fxml");
-    }
-
-    /**
-     * Updates the album information (name, photo count, and date range) in the UI.
-     * @param album The album to update the information for.
-     */
-    private void updateAlbumInfo(Album album) {
-
-        if (album == null) {
-            // Set the album information to empty
-            selectedAlbumName.setText("");
-            selectedAlbumPhotoCount.setText("");
-            selectedAlbumDateRange.setText("");
-            return;
-        }
-
-        // Implement the logic for updating the album information (name, photo count, and date range)
-        selectedAlbumName.setText(album.getName());
-        if (album.getPhotos().size() == 1) {
-            selectedAlbumPhotoCount.setText(album.getPhotos().size() + " photo");
-        } else {
-            selectedAlbumPhotoCount.setText(album.getPhotos().size() + " photos");
-        }
-        selectedAlbumDateRange.setText(album.getDateRange());
     }
 }

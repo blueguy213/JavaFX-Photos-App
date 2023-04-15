@@ -23,6 +23,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 
 import javafx.scene.image.ImageView;
 import javafx.scene.image.Image;
@@ -32,7 +33,7 @@ import javafx.util.Pair;
 import utils.JavaFXUtils;
 
 /**
- * This class contains methods for serializing and deserializing objects.
+ * This class interfaces between the internal model and the UI controllers.
  * @author Sree Kommalapati and Shreeti Patel
  */
 public class DataManager {
@@ -243,11 +244,37 @@ public class DataManager {
      * Updates the given ListView with all the albums for the user that is currently logged in.
      * @param listView The ListView to update.
      */
-    public void updateAlbumListView(ListView<Album> listView) {
+    public void displayAlbumsOn(ListView<String> listView) {
         listView.getItems().clear();
         for (Album album : loggedInUser.getAlbums()) {
-            listView.getItems().add(album);
+            listView.getItems().add(album.getName());
         }
+    }
+
+    /**
+     * Updates the given Labels with the information of the currently opened album.
+     */
+    public void displayAlbumInfoOn(Label albumName, Label photoCount, Label dateRange, String selectedAlbumName) {
+
+        // Get the selectedAlbum
+        Album selectedAlbum = loggedInUser.getAlbumByName(selectedAlbumName);
+
+        if (selectedAlbum == null) {
+            // Set the selectedAlbum information to empty
+            albumName.setText("");
+            photoCount.setText("");
+            dateRange.setText("");
+            return;
+        }
+
+        // Implement the logic for updating the selectedAlbum information (name, photo count, and date range)
+        albumName.setText(selectedAlbum.getName());
+        if (selectedAlbum.getPhotos().size() == 1) {
+            photoCount.setText(selectedAlbum.getPhotos().size() + " photo");
+        } else {
+            photoCount.setText(selectedAlbum.getPhotos().size() + " photos");
+        }
+        dateRange.setText(selectedAlbum.getDateRange());
     }
 
     /**
@@ -267,8 +294,16 @@ public class DataManager {
      * Adds an album with the given name to the user that is currently logged in.
      * @param albumName The name of the album to add.
      */
-    public void addAlbum(Album album) {
-        loggedInUser.addAlbum(album);
+    public void addAlbum(String albumname) {
+        loggedInUser.addAlbum(new Album(albumname));
+        writeUsers();
+    }
+
+    /**
+     * Changes the selected album name to the given name.
+     */
+    public void renameAlbum(String newName) {
+        openedAlbum.setName(newName);
         writeUsers();
     }
 
@@ -276,8 +311,8 @@ public class DataManager {
      * Removes the album with the given name from the user that is currently logged in.
      * @param albumName The name of the album to remove.
      */
-    public void removeAlbum(Album album) {
-        loggedInUser.removeAlbum(album);
+    public void removeAlbum(String albumname) {
+        loggedInUser.removeAlbum(new Album(albumname));
         writeUsers();
     }
 
@@ -285,8 +320,8 @@ public class DataManager {
      * Sets the currently selected album.
      * @param album The album to set as the currently selected album.
      */
-    public void openAlbum(Album album) {
-        openedAlbum = album;
+    public void openAlbum(String albumname) {
+        openedAlbum = loggedInUser.getAlbumByName(albumname);
         selectedPhotoIndex = 0;
     }
 
@@ -321,7 +356,9 @@ public class DataManager {
      * Add the given photo to the currently selected album.
      * @param photo The photo to add.
      */
-    public void addPhotoToOpenedAlbum(Photo photo) {
+    public void addPhotoToOpenedAlbum(String pathname, String caption) {
+        // Create the photo.
+        Photo photo = new Photo(pathname, caption);
         // Check if the photo is already in the album.
         for (Photo p : openedAlbum.getPhotos()) {
             if (p.equals(photo)) {
@@ -472,10 +509,10 @@ public class DataManager {
         valueBox.getItems().clear();
     
         // Loop through the tags of the current user
-        for (Pair<String, String> tag : loggedInUser.getTagTypes()) {
+        for (Pair<String, Pair<Boolean, String>> tag : loggedInUser.getTags().getPairs()) {
             // Add the tag to the ComboBox items
             keyBox.getItems().add(tag.getKey());
-            valueBox.getItems().add(tag.getValue());
+            valueBox.getItems().add(tag.getValue().getValue());
         }
 
         // If there are any tags, select the first one by default
@@ -486,20 +523,50 @@ public class DataManager {
     }
 
     /**
-     * Add a tag to the currently selected photo using the given key and value.
+     * Check if the given tag exists in the current user's tags.
      * @param key The key of the tag.
      * @param value The value of the tag.
      */
-    public void addTagToSelectedPhoto(String key, String value) {
+    public boolean hasTag(String key, String value) {
+        return loggedInUser.getTags().contains(key, value);
+    }
+
+    /**
+     * Add a tag to the currently selected photo using the given key and value.
+     * @param key The key of the tag.
+     * @param value The value of the tag.
+     * @param isUnique The repeatability of the tag.
+     */
+    public void addTagToSelectedPhoto(String key, String value, boolean isUnique) {
+        System.out.println("Key: '" + key + "' Value: '" + value + "'");
+        System.out.println("Is Unique: " + isUnique);
         if (openedAlbum == null) {
             // Prevent the user from adding a tag to a photo that is not in an album.
             JavaFXUtils.showAlert(AlertType.ERROR, "Error", "Cannot add tag to photo not in an album.", "Fix needed :/");
         } else {
+            // Check if the tag already exists.
+            if (openedAlbum.getPhotoAtIndex(selectedPhotoIndex).getTags().contains(key, value)) {
+                // Prevent the user from adding a tag that already exists.
+                JavaFXUtils.showAlert(AlertType.ERROR, "Error", "Tag already exists.", "Add a new tag.");
+                return;
+            } else if (loggedInUser.getTags().contains(key, value)) { // Check if the tag already exists for the user.
+                // Get the repeatability of the existing tag.
+                boolean isOldTagUnique = loggedInUser.getTags().isKeyUnique(key);
+                System.out.println("Is Old Tag Unique: " + isOldTagUnique);
+                // Check if the new and old tags match.
+                if (isUnique != isOldTagUnique) {
+                    // Prevent the user from adding a tag that already exists.
+                    JavaFXUtils.showAlert(AlertType.ERROR, "Error", "Tag already exists.", "Make sure both tags are unique or not.");
+                    return;
+                } else if (isUnique || isOldTagUnique) {
+                    // Prevent the user from adding a tag that already exists.
+                    JavaFXUtils.showAlert(AlertType.ERROR, "Error", "Tag already exists.", "Add a new tag.");
+                    return;
+                }
+            }
             // Add the tag to the photo and user.
-            openedAlbum.getPhotoAtIndex(selectedPhotoIndex).addTag(key, value);
-            loggedInUser.addTag(key, value);
-            // Update the user's tags.
-            loggedInUser.updateTagTypes();
+            openedAlbum.getPhotoAtIndex(selectedPhotoIndex).addTag(key, value, isUnique);
+            loggedInUser.addTag(key, value, isUnique);
              // Write the users to the database.
             writeUsers();
         }
@@ -543,9 +610,9 @@ public class DataManager {
         choiceBox.getItems().clear();
         
         // Loop through the tags of the current user
-        for (Pair<String, String> tag : openedAlbum.getPhotoAtIndex(selectedPhotoIndex).getTags().getPairs()) {
+        for (Pair<String, Pair<Boolean, String>> tag : openedAlbum.getPhotoAtIndex(selectedPhotoIndex).getTags().getPairs()) {
             // Add the tag to the ChoiceBox items
-            choiceBox.getItems().add(tag.getKey() + ": " + tag.getValue());
+            choiceBox.getItems().add(tag.getKey() + ": " + tag.getValue().getValue());
         }
 
         // If there are any tags, select the first one by default
@@ -573,8 +640,6 @@ public class DataManager {
             System.out.println(tagParts[0] + " " + tagParts[1]);
             // Delete the tag from the photo.
             openedAlbum.getPhotoAtIndex(selectedPhotoIndex).removeTag(tagParts[0], tagParts[1]);
-            // Update the user's tags.
-            loggedInUser.updateTagTypes();
             // Write the users to the database.
             writeUsers();
         }
@@ -627,18 +692,18 @@ public class DataManager {
     }
 
     /**
-     * Display the all tagTypes on the given ChoiceBox.
-     * @param choiceBox The ChoiceBox to display the tagTypes on.
+     * Display all the user's tags on the given ChoiceBox.
+     * @param choiceBox The ChoiceBox to display the tags on.
      */
     public void displayAllTagTypesOn(ChoiceBox<String> choiceBox) {
 
         // Clear the existing items in the ChoiceBox
         choiceBox.getItems().clear();
 
-        // Loop through the tagTypes of the current user
-        for (Pair<String, String> tagType : loggedInUser.getTagTypes()) {
+        // Loop through the tags of the current user
+        for (Pair<String, Pair<Boolean, String>> tagType : loggedInUser.getTags().getPairs()) {
             // Add the tagType to the ChoiceBox items
-            choiceBox.getItems().add(tagType.getKey() + ": " + tagType.getValue());
+            choiceBox.getItems().add(tagType.getKey() + ": " + tagType.getValue().getValue());
         }
     }
 
@@ -671,7 +736,7 @@ public class DataManager {
 
         searchResults = searchResults.stream()
             .filter(photo -> photo.getTags().getPairs().stream()
-                .anyMatch(tag -> tag.getKey().equals(key) && tag.getValue().equals(value)))
+                .anyMatch(tag -> tag.getKey().equals(key) && tag.getValue().getValue().equals(value)))
             .collect(Collectors.toList());
         selectedPhotoIndex = 0;
     }
@@ -690,9 +755,9 @@ public class DataManager {
 
         searchResults = searchResults.stream()
             .filter(photo -> photo.getTags().getPairs().stream()
-                .anyMatch(tag -> tag.getKey().equals(key1) && tag.getValue().equals(value1)))
+                .anyMatch(tag -> tag.getKey().equals(key1) && tag.getValue().getValue().equals(value1)))
             .filter(photo -> photo.getTags().getPairs().stream()
-                .anyMatch(tag -> tag.getKey().equals(key2) && tag.getValue().equals(value2)))
+                .anyMatch(tag -> tag.getKey().equals(key2) && tag.getValue().getValue().equals(value2)))
             .collect(Collectors.toList());
         selectedPhotoIndex = 0;
     }
@@ -710,13 +775,8 @@ public class DataManager {
 
         searchResults = searchResults.stream()
             .filter(photo -> photo.getTags().getPairs().stream()
-                .anyMatch((tag -> tag.getKey().equals(key1) && tag.getValue().equals(value1) || (tag.getKey().equals(key2) && tag.getValue().equals(value2)))))
+                .anyMatch((tag -> tag.getKey().equals(key1) && tag.getValue().getValue().equals(value1) || (tag.getKey().equals(key2) && tag.getValue().getValue().equals(value2)))))
             .collect(Collectors.toList());
-
-        searchResults.addAll(loggedInUser.getPhotos().stream()
-            .filter(photo -> photo.getTags().getPairs().stream()
-                .anyMatch(tag -> tag.getKey().equals(key2) && tag.getValue().equals(value2)))
-            .collect(Collectors.toList()));
         selectedPhotoIndex = 0;
     }
 

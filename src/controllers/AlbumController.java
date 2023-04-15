@@ -14,6 +14,7 @@ import javafx.fxml.Initializable;
 
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
@@ -32,14 +33,13 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import model.DataManager;
-import model.Photo;
 
 import utils.JavaFXUtils;
 /**
  * The controller for the Album view.
  * @author  Sree Kommalapati and Shreeti Patel
  */
-public class AlbumController implements Initializable{
+public class AlbumController implements Initializable {
 
     /**
      * The button for adding a photo to the album.
@@ -52,6 +52,9 @@ public class AlbumController implements Initializable{
      */
     @FXML
     private TextField addPhotoCaptionField;
+
+    @FXML
+    private CheckBox isTagUnique;
 
     /**
      * The button for adding a tag to the photo.
@@ -237,8 +240,7 @@ public class AlbumController implements Initializable{
                 }
 
                 String caption = addPhotoCaptionField.getText();
-                Photo photo = new Photo(selectedFileUrl, caption);
-                dataManager.addPhotoToOpenedAlbum(photo);
+                dataManager.addPhotoToOpenedAlbum(selectedFileUrl, caption);
                 updateDisplay();
             } catch (MalformedURLException e) {
                 JavaFXUtils.showAlert(AlertType.ERROR, "Error", "Invalid File", e.getMessage());
@@ -264,8 +266,14 @@ public class AlbumController implements Initializable{
             return;
         }
 
+        // Check if the tag should be unique
+        if (isTagUnique.isSelected() && dataManager.hasTag(key, value)) {
+            JavaFXUtils.showAlert(AlertType.ERROR, "Error", "Invalid Tag", "That tag is unique and already exists.");
+            return;
+        }
+
         // Add the tag to the photo.
-        dataManager.addTagToSelectedPhoto(key, value);
+        dataManager.addTagToSelectedPhoto(key, value, isTagUnique.isSelected());
 
         updateDisplay();
     }
@@ -288,7 +296,7 @@ public class AlbumController implements Initializable{
     void handleDeleteTagButtonClick(ActionEvent event) {
         // Get the key and value from the choice boxes.
         String tag = selectTagToDeleteChoiceBox.getValue();
-
+        System.out.println("Tag: " + tag);
 
         // Delete the tag from the photo.
         dataManager.deleteTagFromSelectedPhoto(tag);

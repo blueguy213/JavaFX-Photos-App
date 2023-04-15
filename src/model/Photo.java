@@ -14,7 +14,7 @@ import javafx.scene.image.ImageView;
  * This class represents a photo in the application. A photo has a path, caption, date and time, and a dictionary of tags.
  * @author Sree Kommalapati and Shreeti Patel
  */
-public class Photo implements Serializable {
+class Photo implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private String path;
@@ -86,9 +86,10 @@ public class Photo implements Serializable {
      * Adds a tag to a photo.
      * @param name the name of the tag
      * @param value the value of the tag
+     * @param isUnique whether the tag is repeatable
      */
-    public void addTag(String name, String value) {
-        tags.add(name, value);
+    public void addTag(String name, String value, boolean isUnique) {
+        tags.add(name, value, isUnique);
     }
 
     /**

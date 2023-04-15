@@ -12,14 +12,14 @@ import javafx.util.Pair;
  * This class represents a user in the application. A user has a username and a list of albums.
  * @author Sree Kommalapati and Shreeti Patel
  */
-public class User implements Serializable {
+class User implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     private String username;
     private List<Album> albums;
     private Set<Photo> photos;
-    private Set<Pair<String, String>> tagTypes;
+    private Tags tags;
 
     /**
      * Creates a new user with the given username.
@@ -29,7 +29,7 @@ public class User implements Serializable {
         this.username = username;
         this.albums = new ArrayList<Album>();
         this.photos = new HashSet<Photo>();
-        this.tagTypes = new HashSet<Pair<String, String>>();
+        this.tags = new Tags();
     }
 
     /**
@@ -46,14 +46,6 @@ public class User implements Serializable {
      */
     public List<Album> getAlbums() {
         return albums;
-    }
-
-    /**
-     * Returns the set of tagTypes for the user.
-     * @return the set of Pair<String, String> tagTypes of the user
-     */
-    public Set<Pair<String, String>> getTagTypes() {
-        return tagTypes;
     }
 
     /**
@@ -125,17 +117,17 @@ public class User implements Serializable {
         }
     }
 
-    /**
-     * Updates the set of tag types of the user.
-     */
-    public void updateTagTypes() {
-        tagTypes.clear();
-        for (Photo photo : photos) {
-            for (Pair<String, String> tag : photo.getTags().getPairs()) {
-                tagTypes.add(tag);
-            }
-        }
-    }
+    // /**
+    //  * Updates the set of tag types of the user.
+    //  */
+    // public void updateTagTypes() {
+    //     tagTypes.clear();
+    //     for (Photo photo : photos) {
+    //         for (Pair<String, Pair<Boolean, String>> tag : photo.getTags().getPairs()) {
+    //             tagTypes.add(tag);
+    //         }
+    //     }
+    // }
 
     /**
      * Adds the given photo to the set of photos of the user if it does not already exist.
@@ -147,8 +139,23 @@ public class User implements Serializable {
 
     /**
      * Adds the given tag to the set of tag types of the user if it does not already exist.
+     * @param key the tag type to add
+     * @param value the tag value to add
+     * @param isUnique is the tag repeatable
      */
-    public void addTag(String tagType, String tagValue) {
-        tagTypes.add(new Pair<String, String>(tagType, tagValue));
+    public void addTag(String key, String value, boolean isUnique) {
+        if (isUnique) {
+            if (tags.getPairs().stream().anyMatch(p -> p.getKey().equals(key) )) {
+                return;
+            }
+        }
+        tags.add(key, value, isUnique);
+    }
+
+    /**
+     * Gets a list of all tags of the user.
+     */
+    public Tags getTags() {
+        return tags;
     }
 }

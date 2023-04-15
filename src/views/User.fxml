@@ -49,7 +49,7 @@
          <children>
             <HBox nodeOrientation="RIGHT_TO_LEFT" prefHeight="50.0" prefWidth="400.0" spacing="10.0">
                <children>
-                  <Label fx:id="selectedAlbumName" nodeOrientation="LEFT_TO_RIGHT" prefHeight="50.0" prefWidth="375.0">
+                  <Label fx:id="selectedAlbumNameLabel" nodeOrientation="LEFT_TO_RIGHT" prefHeight="50.0" prefWidth="375.0">
                      <font>
                         <Font name="Serif Regular" size="18.0" />
                      </font>
@@ -66,7 +66,7 @@
             </HBox>
             <HBox nodeOrientation="RIGHT_TO_LEFT" prefHeight="50.0" prefWidth="400.0" spacing="10.0">
                <children>
-                  <Label fx:id="selectedAlbumPhotoCount" nodeOrientation="LEFT_TO_RIGHT" prefHeight="50.0" prefWidth="375.0">
+                  <Label fx:id="selectedAlbumPhotoCountLabel" nodeOrientation="LEFT_TO_RIGHT" prefHeight="50.0" prefWidth="375.0">
                      <font>
                         <Font name="Serif Regular" size="18.0" />
                      </font>
@@ -86,7 +86,7 @@
             </HBox>
             <HBox nodeOrientation="RIGHT_TO_LEFT" prefHeight="50.0" prefWidth="400.0" spacing="10.0">
                <children>
-                  <Label fx:id="selectedAlbumDateRange" nodeOrientation="LEFT_TO_RIGHT" prefHeight="50.0" prefWidth="375.0">
+                  <Label fx:id="selectedAlbumDateRangeLabel" nodeOrientation="LEFT_TO_RIGHT" prefHeight="50.0" prefWidth="375.0">
                      <font>
                         <Font name="Serif Regular" size="18.0" />
                      </font>
