@@ -296,7 +296,7 @@ public class AlbumController implements Initializable {
     void handleDeleteTagButtonClick(ActionEvent event) {
         // Get the key and value from the choice boxes.
         String tag = selectTagToDeleteChoiceBox.getValue();
-        System.out.println("Tag: " + tag);
+        //System.out.println("Tag: " + tag);
 
         // Delete the tag from the photo.
         dataManager.deleteTagFromSelectedPhoto(tag);
