@@ -12,7 +12,7 @@ import java.time.format.DateTimeFormatter;
  * This class represents an album in the application. An album is a collection of photos with a name.
  * @author Sree Kommalapati and Shreeti Patel
  */
-class Album implements Serializable {
+public class Album implements Serializable {
 
     
     private static final long serialVersionUID = 1L;

@@ -13,7 +13,7 @@ import javafx.util.Pair;
  * This class represents a list of tags in the application. Each tag is a <key, value> pair.
  * @author Sree Kommalapati and Shreeti Patel
  */
-class Tags implements Serializable {
+public class Tags implements Serializable {
 
     /**
      * The list of tags.
