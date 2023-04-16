@@ -1,16 +1,21 @@
+# How to Build and Run
+
+Compile all .java files in src directory into a bin directory. Then, copy the views directory into the bin directory and run Photos.java with the java command.
+
 
 # Desired src directory structure
 
 ## src
 ---
 ### app
-- PhotoLibrary.java
+- Photos.java
 ---
 ### model
 - User.java
 - Photo.java
 - Album.java
 - Tag.java
+- DataManager.java
 ---
 ### view
 - Login.fxml
