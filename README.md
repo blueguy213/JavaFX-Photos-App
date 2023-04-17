@@ -2,6 +2,9 @@
 
 Compile all .java files in src directory into a bin directory. Then, copy the views directory into the bin directory and run Photos.java with the java command.
 
+Compile command: mkdir -p bin && javac --module-path /Users/sreekommalapati/Desktop/SchoolStuff/SoftwareMethodolody/javafx-sdk-19.0.2.1/lib --add-modules javafx.controls,javafx.fxml -d bin src/**/*.java
+
+Run: java bin/app/Photos.java
 
 # Desired src directory structure
 
